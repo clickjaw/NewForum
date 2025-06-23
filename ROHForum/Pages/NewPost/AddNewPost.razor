@@ -1,0 +1,57 @@
+﻿@page "/newpost/add"
+@using ROHForum.Data.Models
+@using ROHForum.Data.Service
+@inject IAddPostService postService
+@inject IUserService userService
+@inject NavigationManager _navManager
+
+<h3>Add New Post</h3>
+
+
+<div class="container">
+    <EditForm Model="@newPost" OnValidSubmit="Save" Context="formContext">
+        <div>
+            <div>
+                <label>Title</label>
+                <InputText @bind-Value="newPost.Title"/>            
+            </div>
+            <div>
+                <label>Body</label>
+                <InputText @bind-Value="newPost.Body" />
+            </div>
+            <div>
+                <label>Tags</label>
+                <InputText @bind-Value="newPost.Tags"/>            
+            </div>
+
+
+        </div>
+        <div>
+            <button type="submit">Add New Post</button>
+        </div>
+
+
+    </EditForm>
+
+</div>
+
+
+
+@code {
+    PostsModel newPost = new()
+    {
+        UserId = 1
+    };
+
+    UserModel userModel = new();
+
+    public void Save()
+    {
+
+        userModel = userService.GetUser(newPost.UserId);
+        newPost.UserModel = userModel;
+        postService.AddPost(newPost);
+        _navManager.NavigateTo("/");
+
+    }
+}

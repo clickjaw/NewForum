@@ -1,0 +1,19 @@
+﻿@inject NavigationManager _navManager
+
+
+
+<div>
+    <div class="top-row px-4 " style="background-color:white; border:none;">
+        <button class="customButton px-3" @onclick='()=>_navManager.NavigateTo("/newpost/add")' >Add New Post</button>
+    </div>
+
+</div>
+
+
+@code{
+
+    public void OpenAddNewPost(){
+        _navManager.NavigateTo("/newpost/add");
+    }
+
+}
