@@ -6,6 +6,7 @@ namespace ROHForum.Data.Service
     {
         bool AddPost(PostsModel postModel);
         bool UpdatePostVotes(PostsModel postModel);
+        PostsModel GetVoteDifference(PostsModel postsModel);
         List<PostsModel> GetTopPosts();
     }
 
@@ -41,6 +42,8 @@ namespace ROHForum.Data.Service
             {
                 _postData.UpdatePostVotes(postModel);
 
+                GetVoteDifference(postModel);
+
                 _dbContext.SaveChanges();
 
 
@@ -56,7 +59,14 @@ namespace ROHForum.Data.Service
 
         public List<PostsModel> GetTopPosts()
         {
-            return _dbContext.Posts.OrderByDescending(x => x.Upvote).ToList();
+            return _dbContext.Posts.OrderByDescending(x => x.VoteDifference).ToList();
+        }
+
+        public PostsModel GetVoteDifference(PostsModel postModel)
+        {
+            postModel.VoteDifference = postModel.Upvote - postModel.Downvote;
+
+            return postModel;
         }
 
     }
