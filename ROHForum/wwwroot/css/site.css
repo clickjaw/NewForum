@@ -20,6 +20,17 @@ h1:focus {
         box-shadow: 5px 5px black;
     }
 
+.upvoteArrow {
+    background: url("~/ROHFORUMART/blankArrowUp.png");
+}
+.upvoteArrow:hover{
+    cursor:pointer;
+    background:url("/ROHFORUMART/greenArrowUp.png");
+}
+.downvoteArrow:hover {
+    cursor: pointer;
+}
+
 .activeTab {
     background: none;
     background-color: black;

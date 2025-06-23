@@ -2,19 +2,21 @@
 
 namespace ROHForum.Data.Service
 {
-    public interface IAddPostService
+    public interface IPostService
     {
         bool AddPost(PostsModel postModel);
+        bool UpdatePostVotes(PostsModel postModel);
         List<PostsModel> GetTopPosts();
     }
 
-    public class AddPostService : IAddPostService
+    public class PostService : IPostService
     {
         private readonly DatabaseContext _dbContext;
-
-        public AddPostService(DatabaseContext dbContext)
+        private readonly IPostData _postData;
+        public PostService(DatabaseContext dbContext, IPostData postData)
         {
             _dbContext = dbContext;
+            _postData = postData;
         }
 
         public bool AddPost(PostsModel postModel)
@@ -29,6 +31,25 @@ namespace ROHForum.Data.Service
             }
             catch(Exception ex)
             {
+                return false;
+            }
+        }
+
+        public bool UpdatePostVotes(PostsModel postModel)
+        {
+            try
+            {
+                _postData.UpdatePostVotes(postModel);
+
+                _dbContext.SaveChanges();
+
+
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+
                 return false;
             }
         }

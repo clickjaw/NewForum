@@ -1,38 +1,80 @@
 ﻿@page "/posts/top"
 
+
 <h3>TopTab</h3>
 
 
 <div>
     <h1>Top Content</h1>
 
+    <div class="upvoteArrow"></div>
 
-    <div class="container" style="border:black 5px dashed;">
+    <div class="container p-3 " style="border:black 5px dashed;">
         @foreach(var post in posts)
         {
-            <div class="row" style="border:black 5px solid;">
+            <div class="row p-2 m-2" style="border:black 5px solid;">
                 <div class="col-md-2">
-                    <div class="row"><img src=""/> @post.Upvote</div>
-                    <div class="row"><img src="" /> @post.Downvote</div>
+                    <div class="row"><img class="upvoteArrow" style="height:100%; width:40px;" @onclick="()=>upvoteClicker(post)" src="/ROHFORUMART/blankArrowUp.png" /> @post.Upvote</div>
+
+                    <div class="row"><img class="downvoteArrow" style="height:100%; width:40px;"  src="/ROHFORUMART/blankArrowDown.png" /> @post.Downvote</div>
                 </div>
-                <p>@post.Title</p>
+                <div class="col-md-9">
+                    <p>@post.Title</p>
+                </div>
+
                 <div>
-                    
-                    </div>
+
+                </div>
             </div>
         }
     </div>
 
+    <div class="container p-3 mt-4" style="border:black 5px dashed;">
+        @for(var i = 0; i < postCount; i++)
+        {
+            <div class="row p-2 m-2" style="border:black 5px solid;">
+                <div class="col-md-2">
+                    <div class="row"><img class="upvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowUp.png" @onclick="()=>upvoteClicker(posts[i])"/> @posts[i].Upvote</div>
+
+                    <div class="row"><img class="downvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowDown.png"  /> @posts[i].Downvote</div>
+                </div>
+                <div class="col-md-9">
+                    <p>@posts[i].Title</p>
+                    <p>Post ID: @posts[i].PostId</p>
+                </div>
+
+                <div>
+                </div>
+            </div>
+        }
+    </div>
 
 
 </div>
 
 @code {
     public List<PostsModel> posts = new();
+    int postCount = 0;
 
     protected override void OnInitialized()
     {
         posts = _postService.GetTopPosts();
+        postCount = posts.Count();
     }
 
+    public void upvoteClicker(PostsModel postModel)
+    {
+      
+                 postModel.Upvote++;
+                _postService.UpdatePostVotes(postModel);
+                posts = _postService.GetTopPosts();
+
+         
+        
+    }
+
+   
+
+
 }
+
