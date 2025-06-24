@@ -9,6 +9,9 @@ h1:focus {
 }
 
 
+.cursorPointer:hover{
+    cursor:pointer;
+}
 
 
 .customButton {
@@ -19,6 +22,8 @@ h1:focus {
         cursor: pointer;
         box-shadow: 5px 5px #005da6;
         border-block-color: #005da6;
+        background-color: aliceblue;
+        /* ROH Color #005da6*/
     }
 .customButtonActive {
     box-shadow: 5px 5px black;
@@ -28,6 +33,21 @@ h1:focus {
         cursor: pointer;
         box-shadow: 5px 5px black;
     }
+    .dashedBorder{
+        border:black 5px dashed;
+    }
+  /*  .dashedBorder:hover {
+        border: blue 5px dashed;
+    }*/
+
+.postBorder {
+    border: black 5px solid;
+}
+    .postBorder:hover {
+        border: #005da6 5px solid;
+        background-color: aliceblue;
+    }
+
 
 .upvoteArrow {
     background: url("~/ROHFORUMART/blankArrowUp.png");

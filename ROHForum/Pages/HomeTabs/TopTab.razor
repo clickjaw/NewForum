@@ -9,16 +9,16 @@
 
     <div class="upvoteArrow"></div>
 
-    <div class="container p-3 " style="border:black 5px dashed;">
+    <div class="container p-3 dashedBorder">
         @foreach(var post in posts)
         {
-            <div class="row p-2 m-2" style="border:black 5px solid;">
+            <div class="row p-2 m-2 postBorder">
                 <div class="col-md-2">
                     <div class="row"><img class="upvoteArrow" style="height:100%; width:40px;" @onclick="()=>upvoteClicker(post)" src="/ROHFORUMART/blankArrowUp.png" /> @post.Upvote</div>
 
                     <div class="row"><img class="downvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowDown.png" @onclick="()=>downvoteClicker(post)" /> @post.Downvote</div>
                 </div>
-                <div class="col-md-9">
+                <div class="col-md-9 cursorPointer" @onclick='(()=>_navManager.NavigateTo($"/posts/{post.PostId}"))'>
                     <p>@post.Title</p>
                 </div>
 
@@ -64,13 +64,10 @@
 
     public void upvoteClicker(PostsModel postModel)
     {
-      
-                 postModel.Upvote++;
-                _postService.UpdatePostVotes(postModel);
-                posts = _postService.GetTopPosts();
 
-         
-        
+        postModel.Upvote++;
+        _postService.UpdatePostVotes(postModel);
+        posts = _postService.GetTopPosts();
     }
 
     public void downvoteClicker(PostsModel postModel)
@@ -80,8 +77,6 @@
         _postService.UpdatePostVotes(postModel);
         posts = _postService.GetTopPosts();
 
-
-
     }
 
    
@@ -89,5 +84,5 @@
 
     
 
-}
+
 

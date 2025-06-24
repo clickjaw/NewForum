@@ -6,6 +6,7 @@ namespace ROHForum.Data
     public interface IPostData: IGenericRepository<PostsModel>
     {
         public bool UpdatePostVotes(PostsModel postModel);
+
     }
 
     public class PostData: GenericRepository<PostsModel>, IPostData

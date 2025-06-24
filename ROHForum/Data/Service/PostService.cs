@@ -8,6 +8,8 @@ namespace ROHForum.Data.Service
         bool UpdatePostVotes(PostsModel postModel);
         PostsModel GetVoteDifference(PostsModel postsModel);
         List<PostsModel> GetTopPosts();
+
+        PostsModel GetSinglePost(int id);
     }
 
     public class PostService : IPostService
@@ -64,6 +66,14 @@ namespace ROHForum.Data.Service
             postModel.VoteDifference = postModel.Upvote - postModel.Downvote;
 
             return postModel;
+        }
+
+        public PostsModel GetSinglePost(int id)
+        {
+
+            return _postData.GetByID(id);
+            
+           
         }
 
     }

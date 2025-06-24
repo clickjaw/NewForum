@@ -1,0 +1,30 @@
+﻿@page "/posts/{postId:int?}"
+
+
+<div class="container">
+    <div>
+        @postModel.Title
+        <br/>
+        @postModel.Body
+        <br/>
+        @postModel.Tags
+
+</div>
+</div>
+
+
+
+
+@code{
+    [Parameter]
+    public int postId{get;set;}
+
+    public PostsModel postModel = new();
+
+
+    protected override void OnInitialized()
+    {
+        postModel = _postService.GetSinglePost(postId);
+    }
+
+}
