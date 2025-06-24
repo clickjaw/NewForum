@@ -6,6 +6,7 @@ namespace ROHForum.Data.Service
     {
         public List<PostsModel> GetTagPosts(string tagName);
         void AddNewTag(TagModel tagModel);
+        List<TagModel> GetAllTagPosts();
     }
 
     public class TagService : ITagService
@@ -23,13 +24,19 @@ namespace ROHForum.Data.Service
             return _dbContext.Posts.Where(x => x.Tags == tagName).ToList();        
         }
 
+        public List<TagModel> GetAllTagPosts()
+        {
+
+            return _dbContext.Tags.ToList();
+        }
+
         public void AddNewTag(TagModel tagModel)
         {
-            List<TagModel> allTags = new List<TagModel>();
+            List<TagModel> allTags = GetAllTagPosts(); 
             int count = 0;
             foreach(var i in allTags)
             {
-                if(i.TagName == tagModel.TagName)
+                if(i.TagName.ToLower() == tagModel.TagName.ToLower())
                 {
                     count++;
                 }

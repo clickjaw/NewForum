@@ -1,4 +1,23 @@
-﻿<ul class="nav justify-content-end">
+﻿@using ROHForum.Data
+
+<ul class="nav col">
+    <li class="nav-item">
+        <div class="dropdown">
+            <button class="customButton mx-2 px-4">All Communities</button>
+            <div class="dropdown-content">
+
+
+                @foreach(var tag in allTags){
+                    <button class="customButton my-2 px-4" @onclick='()=> _navManager.NavigateTo("/posts/tag/" + tag.TagName)'>@tag.TagName</button>
+
+                }
+
+            </div>
+        </div>
+    </li>
+
+</ul>
+<ul class="nav justify-content-end">
     <li class="nav-item">
         <button class="px-4 mx-2 customButton" aria-current="page" @onclick='()=> _navManager.NavigateTo("/")'>Home</button>
     </li>
@@ -24,8 +43,7 @@
 
 
 @code {
-
-
+    public List<TagModel> allTags = new();
 
     public void GoToTopPosts()
     {
@@ -34,7 +52,7 @@
 
     protected override void OnInitialized()
     {
-        
+        allTags = _tagService.GetAllTagPosts();
     }
 
     

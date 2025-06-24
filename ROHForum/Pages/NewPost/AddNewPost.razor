@@ -56,7 +56,7 @@
         postService.AddPost(newPost);
         tagModel.TagName = newPost.Tags;
         _tagService.AddNewTag(tagModel);
-        _navManager.NavigateTo("/");
+        _navManager.NavigateTo("/", true);
 
     }
 }
