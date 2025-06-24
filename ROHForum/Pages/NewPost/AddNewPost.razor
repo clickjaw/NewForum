@@ -1,4 +1,5 @@
 ﻿@page "/newpost/add"
+@using ROHForum.Data
 @using ROHForum.Data.Models
 @using ROHForum.Data.Service
 @inject IPostService postService
@@ -43,6 +44,8 @@
         UserId = 1
     };
 
+
+    TagModel tagModel = new();
     UserModel userModel = new();
 
     public void Save()
@@ -51,6 +54,8 @@
         userModel = userService.GetUser(newPost.UserId);
         newPost.UserModel = userModel;
         postService.AddPost(newPost);
+        tagModel.TagName = newPost.Tags;
+        _tagService.AddNewTag(tagModel);
         _navManager.NavigateTo("/");
 
     }

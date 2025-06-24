@@ -1,0 +1,56 @@
+﻿@page "/posts/tag/{tagName}"
+
+<div>
+
+   
+</div>
+<div class="container p-3">
+    <h1>@tagName Community</h1>
+
+    @foreach (var post in tagPosts)
+    {
+        <div class="row p-2 m-2 postBorder">
+            <div class="col-md-2">
+                <div class="row"><img class="upvoteArrow" style="height:100%; width:40px;" @onclick="()=>upvoteClicker(post)" src="/ROHFORUMART/blankArrowUp.png" /> @post.Upvote</div>
+
+                <div class="row"><img class="downvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowDown.png" @onclick="()=>downvoteClicker(post)" /> @post.Downvote</div>
+            </div>
+            <div class="col-md-9 cursorPointer" @onclick='(()=>_navManager.NavigateTo($"/posts/{post.PostId}"))'>
+                <p>@post.Title</p>
+            </div>
+
+            <div>
+            </div>
+        </div>
+    }
+</div>
+
+
+@code{
+    [Parameter]
+    public string tagName{ get; set; }
+
+    public List<PostsModel> tagPosts = new();
+
+    protected override void OnInitialized()
+    {
+        tagPosts = _tagService.GetTagPosts(tagName);
+    }
+
+    public void upvoteClicker(PostsModel postModel)
+    {
+
+        postModel.Upvote++;
+        _postService.UpdatePostVotes(postModel);
+        tagPosts = _postService.GetTopPosts();
+    }
+
+    public void downvoteClicker(PostsModel postModel)
+    {
+
+        postModel.Downvote++;
+        _postService.UpdatePostVotes(postModel);
+        tagPosts = _postService.GetTopPosts();
+
+    }
+}

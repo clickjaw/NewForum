@@ -1,15 +1,11 @@
 ﻿@page "/posts/top"
 
-
-<h3>TopTab</h3>
-
-
 <div class="">
-    <h1>Top Content</h1>
 
-    <div class="upvoteArrow"></div>
 
-    <div class="container p-3 dashedBorder">
+
+    <div class="container p-3">
+        <h1>Top Content</h1>
         @foreach(var post in posts)
         {
             <div class="row p-2 m-2 postBorder">
@@ -18,8 +14,21 @@
 
                     <div class="row"><img class="downvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowDown.png" @onclick="()=>downvoteClicker(post)" /> @post.Downvote</div>
                 </div>
-                <div class="col-md-9 cursorPointer" @onclick='(()=>_navManager.NavigateTo($"/posts/{post.PostId}"))'>
-                    <p>@post.Title</p>
+                <div class="col-md-9 ">
+                    <div class="row cursorPointer onHoverText" @onclick='(()=>_navManager.NavigateTo($"/posts/{post.PostId}"))'><p>@post.Title</p></div>
+                    <div class="row cursorPointer onHoverText d-flex justify-content-between" @onclick='(()=>_navManager.NavigateTo($"/posts/tag/{post.Tags}"))'>
+                        @if(post.PostComments is not null){
+                            <div class="col">@post.PostComments.Count() comment(s)</div>
+                            <div class="col-2">@post.Tags</div>
+
+                        }
+                        else
+                        {
+                            <div class="col">0 comments</div>
+                            <div class="col-2">@post.Tags</div>
+
+                        }
+                        </div>
                 </div>
 
                 <div>
@@ -29,27 +38,7 @@
         }
     </div>
 
-    <div class="container p-3 mt-4" style="border:black 5px dashed;">
-        @for(var i = 0; i < postCount; i++)
-        {
-            <div class="row p-2 m-2" style="border:black 5px solid;">
-                <div class="col-md-2">
-                    <div class="row"><img class="upvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowUp.png" @onclick="()=>upvoteClicker(posts[i])"/> @posts[i].Upvote</div>
-
-                    <div class="row"><img class="downvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowDown.png" @onclick="()=>downvoteClicker(posts[i])" /> @posts[i].Downvote</div>
-                </div>
-                <div class="col-md-9">
-                    <p>@posts[i].Title</p>
-                    <p>Post ID: @posts[i].PostId</p>
-                </div>
-
-                <div>
-                </div>
-            </div>
-        }
-    </div>
-
-
+ 
 </div>
 
 @code {

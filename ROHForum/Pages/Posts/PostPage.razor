@@ -16,7 +16,7 @@
         <br/>
         <div>
             <div class="border-bottom">Tags</div>
-            <div class="fst-italic">@postModel.Tags</div>
+            <div class="fst-italic" @onclick='(()=> _navManager.NavigateTo("/posts/tag/"+ postModel.Tags))'>@postModel.Tags</div>
         </div>
         
 

@@ -19,6 +19,7 @@ namespace ROHForum.Data
         public DbSet<UserModel> Users { get; set; }
         public DbSet<ModModel> Mods { get; set; }
         public DbSet<PostsModel> Posts { get; set; }
+        public DbSet<TagModel> Tags { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
