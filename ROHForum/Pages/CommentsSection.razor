@@ -6,7 +6,39 @@
         <h1>Comments</h1>
         <h1>PostId: @postId</h1>
     </div>
-    
+    <EditForm Model="@commentModel" OnValidSubmit="SaveComment" Context="formContext">
+        <InputText @bind-Value="commentModel.Comment"/>
+        <button type="submit">Save Comment</button>
+    </EditForm>
+    <div>
+        @if(allComments is not null)
+        {
+            @foreach(var c in allComments)
+            {
+                <div class="row p-2 m-2 postBorder">
+                    <div class="col-md-2">
+                        <div class="row"><img class="upvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowUp.png" /> @c.Upvote</div>
+
+                        <div class="row"><img class="downvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowDown.png" /> @c.Downvote</div>
+                    </div>
+
+                    <div class="col-md-9 cursorPointer">
+                        <p>@c.Comment</p>
+                    </div>
+
+                    <div>
+                    </div>
+                </div>
+            }
+
+        }
+        else
+        {
+            <div class="row p-2 m-2 postBorder">
+                <h3>No comments yet</h3>
+            </div>
+        }
+    </div>
 </div>
 
 
@@ -14,12 +46,30 @@
     [Parameter]
     public int postId { get; set; }
 
+    public CommentsModel commentModel = new();
+    public PostsModel postModel = new();
+    public List<CommentsModel> allComments = new();
+
+    public void SaveComment()
+    {
+        postModel = _postService.GetSinglePost(postId);
+        commentModel.CommentCreated = DateTime.Now;
+        commentModel.UserId = @postModel.UserId;
+        commentModel.PostId = postId;
+
+        _commentService.AddComment(commentModel);
+
+        allComments = _commentService.GetAllComments(postId);
+        _navManager.NavigateTo("/posts/" + postId);
 
 
+
+    }
 
     protected override void OnInitialized()
     {
-        
+        allComments = _commentService.GetAllComments(postId);
+
     }
 
 

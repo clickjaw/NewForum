@@ -23,10 +23,17 @@ namespace ROHForum.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            //modelBuilder.Entity<CommentsModel>()
-            //        .HasOne(a => a.UserModel)
-            //        .WithMany(b => b.UserComments)
-            //        .HasForeignKey(b => b.CommentId);
+            modelBuilder.Entity<CommentsModel>()
+                    .HasOne(a => a.UserModel)
+                    .WithMany(b => b.UserComments)
+                    .HasForeignKey(b => b.UserId);
+
+            modelBuilder.Entity<CommentsModel>()
+                .HasOne(a => a.PostsModel)
+                .WithMany(b => b.PostComments)
+                .HasForeignKey(b => b.PostId);
+
+
 
             modelBuilder.Entity<PostsModel>()
                     .HasOne(a => a.UserModel)

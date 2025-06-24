@@ -16,5 +16,6 @@ namespace ROHForum.Data.Models
         public int VoteDifference { get; set; }
         
         public UserModel UserModel { get; set; }
+        public List<CommentsModel> PostComments { get; set; }
     }
 }
