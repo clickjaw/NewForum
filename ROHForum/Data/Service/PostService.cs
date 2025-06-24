@@ -45,9 +45,6 @@ namespace ROHForum.Data.Service
                 GetVoteDifference(postModel);
 
                 _dbContext.SaveChanges();
-
-
-
                 return true;
             }
             catch (Exception ex)

@@ -1,20 +1,51 @@
 ﻿@page "/"
+@inject NavigationManager _navManager
+
 
 <PageTitle>ROH Forum</PageTitle>
 
-
 <div>
-    <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <button class="nav-link activeTab" aria-current="page" href="/posts/top">Top</button>
-        </li>
-        <li class="nav-item">
-            <button class="nav-link inactiveTab" href="#">New</button>
-        </li>
-        <li class="nav-item">
-            <button class="nav-link inactiveTab" href="#">Your</button>
-        </li>
-        
-    </ul>
 
+   @*  <div>
+        <div>Font Size: @doubleFont</div>
+        <div style="font-size:@doubleFont" @onclick="(()=>DoubleFontSize(doubleNum))">
+            Homepage
+        </div>
+
+    </div>
+    <div style="background-color: yellow; width:50px; height: 50px;" @onclick="AddLetter">
+        @foreach(var i in Letters)
+        {
+            <p>@i</p>
+        }
+    </div> *@
 </div>
+
+@code{
+    public string doubleFont = "12px";
+    public int doubleNum;
+    public int totalNum;
+    public string doubleLetter;
+    public List<string> Letters = new();
+
+    
+
+    protected override void OnInitialized()
+    {
+        doubleNum = 12;
+    }
+
+    public void DoubleFontSize(int num)
+    {
+        totalNum += num * 2;
+        doubleFont = $"{totalNum}px";
+
+    }
+
+    public void AddLetter()
+    {
+        Letters.Add("H");
+    }
+
+}
+
