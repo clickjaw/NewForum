@@ -1,0 +1,26 @@
+﻿@page "/comments/{postId:int?}"
+
+
+<div class="p-4">
+    <div class="d-flex justify-content-between">
+        <h1>Comments</h1>
+        <h1>PostId: @postId</h1>
+    </div>
+    
+</div>
+
+
+@code{
+    [Parameter]
+    public int postId { get; set; }
+
+
+
+
+    protected override void OnInitialized()
+    {
+        
+    }
+
+
+}

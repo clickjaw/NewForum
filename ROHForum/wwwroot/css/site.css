@@ -9,16 +9,56 @@ h1:focus {
 }
 
 
+.cursorPointer:hover{
+    cursor:pointer;
+}
 
 
 .customButton {
-    background-color: white;
+    box-shadow: 5px 5px black;
 }
 
     .customButton:hover {
         cursor: pointer;
+        box-shadow: 5px 5px #005da6;
+        border-block-color: #005da6;
+        background-color: aliceblue;
+        /* ROH Color #005da6*/
+    }
+.customButtonActive {
+    box-shadow: 5px 5px black;
+}
+
+    .customButtonActive:hover {
+        cursor: pointer;
         box-shadow: 5px 5px black;
     }
+    .dashedBorder{
+        border:black 5px dashed;
+    }
+  /*  .dashedBorder:hover {
+        border: blue 5px dashed;
+    }*/
+
+.postBorder {
+    border: black 5px solid;
+}
+    .postBorder:hover {
+        border: #005da6 5px solid;
+        background-color: aliceblue;
+    }
+
+
+.upvoteArrow {
+    background: url("~/ROHFORUMART/blankArrowUp.png");
+}
+.upvoteArrow:hover{
+    cursor:pointer;
+    background:url("/ROHFORUMART/greenArrowUp.png");
+}
+.downvoteArrow:hover {
+    cursor: pointer;
+}
 
 .activeTab {
     background: none;
@@ -42,6 +82,35 @@ h1:focus {
     box-shadow: 5px -5px black;
     color: black;
     border: none;
+}
+
+.crt::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(18, 16, 16, 0.1);
+    opacity: 0;
+    z-index: 2;
+    pointer-events: none;
+    /* animation: flicker 2s infinite; */
+}
+
+.crt::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 2;
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
 }
 
 .forceEnd{

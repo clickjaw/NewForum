@@ -13,6 +13,7 @@ namespace ROHForum.Data.Models
         public DateTime PostCreated { get; set; } = DateTime.Now;
         public int Upvote { get; set; }
         public int Downvote { get; set; }
+        public int VoteDifference { get; set; }
         
         public UserModel UserModel { get; set; }
     }
