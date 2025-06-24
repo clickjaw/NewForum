@@ -13,6 +13,7 @@ namespace ROHForum.Data.Models
         public DateTime CommentUpdated { get; set; }
         public int Upvote { get; set; }
         public int Downvote { get; set; }
+        public int CommentParentId { get; set; }
 
         public UserModel UserModel { get; set; }
         public PostsModel PostsModel { get; set; }

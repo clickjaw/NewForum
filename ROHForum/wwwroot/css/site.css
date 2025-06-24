@@ -44,6 +44,16 @@ h1:focus {
         border: blue 5px dashed;
     }*/
 
+    .commentButton{
+        
+        opacity:0;
+    }
+
+        .commentButton:hover {
+            opacity: 1;
+            height: 100%;
+        }
+
 .postBorder {
     border: black 5px solid;
 }

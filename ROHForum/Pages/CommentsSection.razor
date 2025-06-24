@@ -14,7 +14,7 @@
         @if(allComments is not null)
         {
             @foreach(var c in allComments)
-            {
+            {@if(c.CommentParentId < 1){
                 <div class="row p-2 m-2 postBorder">
                     <div class="col-md-2">
                         <div class="row"><img class="upvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowUp.png" /> @c.Upvote</div>
@@ -22,13 +22,61 @@
                         <div class="row"><img class="downvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowDown.png" /> @c.Downvote</div>
                     </div>
 
-                    <div class="col-md-9 cursorPointer">
+                    <div class="col-md-6 cursorPointer">
                         <p>@c.Comment</p>
+                    </div>
+                    <div class="col-md-4 commentButton" @onclick="(()=>OpenChildComment(c.CommentId))">
+                        <p >Comment?</p>
                     </div>
 
                     <div>
                     </div>
+                    @if (childCommentModel.CommentParentId == c.CommentId)
+                    {
+                        <div style="display:@commentDisplay">
+                            <EditForm Model="@childCommentModel" OnValidSubmit="SaveChildComment" Context="formContext">
+                                <InputText @bind-Value=childCommentModel.Comment/>
+
+                                <button type="submit">Save Child Comment</button>
+                            </EditForm>
+                        </div>
+                    }
                 </div>
+                
+                @foreach(var child in allChildComments)
+                {
+                    if(child.CommentParentId == c.CommentId)
+                    {
+                        <div class="row p-2 ms-5 me-2 postBorder  " >
+                            <div class="col-md-2">
+                                <div class="row"><img class="upvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowUp.png" /> @child.Upvote</div>
+
+                                <div class="row"><img class="downvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowDown.png" /> @child.Downvote</div>
+                            </div>
+
+                            <div class="col-md-6 cursorPointer">
+                                <p>@child.Comment</p>
+                            </div>
+                            <div class="col-md-4 commentButton" @onclick="(()=>OpenChildComment(child.CommentId))">
+                                <p>Comment?</p>
+                            </div>
+
+                            <div>
+                            </div>
+                            @if (childCommentModel.CommentParentId == c.CommentId)
+                            {
+                                <div style="display:@commentDisplay">
+                                    <EditForm Model="@childCommentModel" OnValidSubmit="SaveChildComment" Context="formContext">
+                                        <InputText @bind-Value=childCommentModel.Comment />
+
+                                        <button type="submit">Save Child Comment</button>
+                                    </EditForm>
+                                </div>
+                            }
+                        </div>
+                    }
+                }
+                }
             }
 
         }
@@ -47,8 +95,11 @@
     public int postId { get; set; }
 
     public CommentsModel commentModel = new();
+    public CommentsModel childCommentModel = new();
     public PostsModel postModel = new();
     public List<CommentsModel> allComments = new();
+    public List<CommentsModel> allChildComments = new();
+    public string commentDisplay;
 
     public void SaveComment()
     {
@@ -62,14 +113,35 @@
         allComments = _commentService.GetAllComments(postId);
         _navManager.NavigateTo("/posts/" + postId);
 
+    }
 
+    public void OpenChildComment(int parentId)
+    {
+        commentDisplay = "block";
+        childCommentModel.CommentParentId = parentId;
+    }
 
+    public void SaveChildComment()
+    {
+        postModel = _postService.GetSinglePost(postId);
+        childCommentModel.CommentCreated = DateTime.Now;
+        childCommentModel.UserId = @postModel.UserId;
+        childCommentModel.PostId = postId;
+
+        _commentService.AddComment(childCommentModel);
+
+        allComments = _commentService.GetAllComments(postId);
+        commentDisplay = "none";
+
+        _navManager.NavigateTo("/posts/" + postId, true);
+        
     }
 
     protected override void OnInitialized()
     {
         allComments = _commentService.GetAllComments(postId);
-
+        allChildComments = _commentService.GetAllComments(postId);
+        commentDisplay ="none";
     }
 
 
