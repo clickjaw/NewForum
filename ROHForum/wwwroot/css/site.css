@@ -17,6 +17,22 @@ h1:focus {
     font-weight: bold;
 }
 
+.loginLabel {
+    box-shadow: 5px 5px black;
+    border-block-color: black;
+    background-color: white;
+    border: 2px black solid;
+}
+.customButtonLogin:hover {
+    cursor: pointer;
+    box-shadow: 5px 5px green;
+    border-block-color: green;
+    background-color: #D4F3CE;
+}
+
+.customButtonLogin {
+    box-shadow: 5px 5px black;
+}
 
 .customButton {
     box-shadow: 5px 5px black;

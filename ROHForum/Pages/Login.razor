@@ -1,12 +1,119 @@
-﻿<h3>Login</h3>
+﻿@page "/"
+@layout BlankPage
 
-<div>
-    <form>
 
-</form>
+
+<div class="container" >
+    <EditForm Model = "user" Context="formContext" OnValidSubmit="LoginUser" OnInvalidSubmit="ReturnToLogin">
+        <div>
+            <div style="font-size:26px; display:@toggleFormLogin" >
+                <label class="px-4 mx-2 mb-4 loginLabel"><h2>Login</h2></label>
+                <div class="m-4 w-50"><label class="px-4 mx-2 mb-4 loginLabel">Username</label><InputText class="px-4 mx-2 customButton" style="font-size:26px;background-color:white;" @bind-Value="user.Username" /></div>
+                <div class="m-4 w-50"><label class="px-4 mx-2 mb-4 loginLabel">Password</label><InputText type="password" style=" font-size:26px;background-color:white;" class="px-4 mx-2 customButton" @bind-Value="user.Password" /></div>
+                <div class="row">
+                <div class="col-md-3"><button class="px-4 mx-2 customButtonLogin" type="submit">Login</button></div>
+                <div class="col-md-3">
+
+                    <button type="button" class="px-4 mx-2 customButton" @onclick="ToggleNewUser">New User?</button>
+                </div>
+                </div>
+            </div>
+
+            
+
+
+        </div>
+
+    </EditForm>
+    <EditForm Model="newUser" Context="formContext" OnValidSubmit="LoginNewUser" OnInvalidSubmit="ReturnToLogin">
+        <div>
+            <label style="font-size:26px; display:@toggleFormNewUser">
+                <div class="px-4 mx-2 mb-4 loginLabel"><h2>New user registration</h2></div>
+                <div><label class="px-4 mx-2 mb-4 loginLabel">Username</label><InputText @bind-Value="newUser.Username" /></div>
+                <div><label class="px-4 mx-2 mb-4 loginLabel">Password</label><InputText type="password" @bind-Value="newUser.Password" /></div>
+                <div><button type="submit" px-4 mx-2 customButtonLogin>Create Account</button></div>
+            </label>
+
+
+
+
+        </div>
+
+    </EditForm>
 </div>
 
+<style>
+    .valid.modified:not([type=checkbox]){
+        outline:none;
+    }
+</style>
 
 @code {
+    public UserModel user = new();
+    public UserModel newUser = new();
+    public UserModel validateUser = new();
+
+    public string? toggleFormLogin;
+    public string? toggleFormNewUser;
+
+    public void LoginUser()
+    {
+        if (user is not null)
+        {
+            validateUser = _userService.ValidateUser(user);
+        }
+        else
+        {
+            ReturnToLogin();
+        }
+
+        if (validateUser.Username is not null)
+        {
+            user.Username = "";
+            user.Password = "";
+            _navManager.NavigateTo("/home");
+        }
+        else
+        {
+            ReturnToLogin();
+        }
+    }
+
+    public void LoginNewUser()
+    {
+        bool testUser = _userService.AddNewUser(newUser);
+
+        if (testUser)
+        {
+            _navManager.NavigateTo("/home");
+        }
+        else
+        {
+            ReturnToLogin();
+        }
+
+
+
+    }
+
+   
+
+    public void ReturnToLogin()
+    {
+        _navManager.NavigateTo("/");
+    }
+
+    public void ToggleNewUser()
+    {
+        toggleFormNewUser = "block";
+        toggleFormLogin = "none";
+    }
+
+    protected override void OnInitialized()
+    {
+        toggleFormLogin = "block";
+        toggleFormNewUser = "none";
+    }
+
 
 }
