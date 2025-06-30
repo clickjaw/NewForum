@@ -7,6 +7,17 @@
         <img class="downvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/redArrowDown.png" />
         Total Post Downvotes: - @userModel.TotalDownvotes
     </div>
+
+    <div class="mt-5">
+        <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+
+    </div>
+    <div mt-5>
+        <div class="miniBar">
+            <div class="miniBarProgress" style="left: 0; width: @upvoteBar; background-color: green;">@upvoteBar</div>
+            <div class="miniBarProgress" style="left: @upvoteBar; width: @downvoteBar; background-color: red;">@downvoteBar</div>
+        </div>
+    </div>
 </div>
 
 @code{
@@ -15,6 +26,15 @@
 
     public List<PostsModel> userPosts = new();
     UserModel userModel = new();
+
+    public double upvoteBarMath;
+    public double downvoteBarMath;
+    public double totalBarMath;
+
+
+    public string upvoteBar;
+    public string downvoteBar;
+    public string totalBar;
 
     protected override void OnInitialized()
     {
@@ -27,7 +47,46 @@
             userModel.TotalUpvotes += post.Upvote;
             userModel.TotalDownvotes += post.Downvote;
         }
+
+        totalBarMath = userModel.TotalUpvotes + userModel.TotalDownvotes;
+        downvoteBarMath = totalBarMath - userModel.TotalDownvotes;
+        upvoteBarMath = totalBarMath - userModel.TotalUpvotes;
+        double userUpvotes = userModel.TotalUpvotes;
+
+
+        double upvoteFinal = ((userUpvotes / totalBarMath) * 100);
+        double downvoteFinal = ((userModel.TotalDownvotes / totalBarMath) * 100);
+        upvoteBar = $"{upvoteFinal}%";
+        downvoteBar = $"{downvoteFinal}%";
+
+
     }
 
 
 }
+
+    <style>
+    .progress-bar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: radial-gradient(closest-side, white 79%, transparent 80% 100%), conic-gradient(hotpink 75%, pink 0);
+    }
+    
+    .miniBarProgress {
+        height: 100%;
+        position: absolute;
+        top: 0rem;
+        left: 0rem;
+    }
+
+    .miniBar {
+        height: 2rem;
+        border: 1px solid #8a898a;
+        position: relative;
+        width: -webkit-calc(100% - 2rem);
+        width: -moz-calc(100% - 2rem);
+        width: calc(100% - 2rem);
+        margin-right: 0.5rem;
+    }
+    </style>
