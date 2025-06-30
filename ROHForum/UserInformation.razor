@@ -24,6 +24,8 @@ else
 
     public string userNameParent { get; set; }
     public int userIdParent{ get; set; }
+    public int userUpvotes{ get; set; }
+    public int userDownvotes{ get; set; }
 
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -44,15 +46,29 @@ else
         userModel = userSessionStorageResult.Success ? userSessionStorageResult.Value : new UserSessionViewModel()
             {
                 Username = "",
-                UserId = 0
+                UserId = 0,
+                TotalUpvotes =0,
+                TotalDownvotes =0
 
             };
 
         UserModel user = _userService.GetUserByUsername(userModel.Username);
+        List<PostsModel> userPosts = _postService.GetPostsByUser(user.UserId);
+
+        user.TotalDownvotes = 0;
+        user.TotalUpvotes = 0;
+        @foreach (var post in userPosts)
+        {
+            user.TotalUpvotes += post.Upvote;
+            user.TotalDownvotes += post.Downvote;
+        }
 
         isLoaded = true;
         userNameParent = userModel.Username;
         userIdParent = user.UserId;
+        userUpvotes = user.TotalUpvotes;
+        userDownvotes = user.TotalDownvotes;
+
 
 
 

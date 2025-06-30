@@ -26,6 +26,7 @@ namespace ROHForum.Data.Service
         {
             try
             {
+                postModel.PostCreated = DateTime.Now;
                 _dbContext.Posts.Add(postModel);
 
 

@@ -7,6 +7,7 @@ namespace ROHForum.Data.Service
         public List<PostsModel> GetTagPosts(string tagName);
         void AddNewTag(TagModel tagModel);
         List<TagModel> GetAllTagPosts();
+        List<PostsModel> GetTagsByUser(int userId);
     }
 
     public class TagService : ITagService
@@ -30,6 +31,11 @@ namespace ROHForum.Data.Service
             return _dbContext.Tags.ToList();
         }
 
+        public List<PostsModel> GetTagsByUser(int userId)
+        {
+            return _dbContext.Posts.Where(x=>x.UserId == userId).ToList();
+        }
+
         public void AddNewTag(TagModel tagModel)
         {
             List<TagModel> allTags = GetAllTagPosts(); 
@@ -47,6 +53,8 @@ namespace ROHForum.Data.Service
                 _dbContext.SaveChanges();
             }
         }
+
+
 
     }
 }

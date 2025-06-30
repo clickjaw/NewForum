@@ -1,0 +1,33 @@
+﻿<div>
+    <div class="row">
+        <img class="upvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/greenArrowUp.png" />
+        Total Post Upvotes: @userModel.TotalUpvotes
+    </div>
+    <div class="row">
+        <img class="downvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/redArrowDown.png" />
+        Total Post Downvotes: - @userModel.TotalDownvotes
+    </div>
+</div>
+
+@code{
+    [CascadingParameter]
+    public UserInformation UserInformation{ get; set; }
+
+    public List<PostsModel> userPosts = new();
+    UserModel userModel = new();
+
+    protected override void OnInitialized()
+    {
+        userPosts = _postService.GetPostsByUser(UserInformation.userIdParent);
+        userModel = _userService.GetUserByUsername(UserInformation.userNameParent);
+        userModel.TotalDownvotes = 0;
+        userModel.TotalUpvotes = 0;
+        @foreach(var post in userPosts)
+        {
+            userModel.TotalUpvotes += post.Upvote;
+            userModel.TotalDownvotes += post.Downvote;
+        }
+    }
+
+
+}

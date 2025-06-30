@@ -21,13 +21,22 @@
 
                             <div class="row"><img class="downvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowDown.png" /> @c.Downvote</div>
                         </div>
+                        <div class="col">
+                            <div class="row">
+                            <div class="col-md-6 cursorPointer">
+                                <p>@c.Comment</p>
+                            </div>
+                            <div class="col-md-4 commentButton" @onclick="(()=>OpenChildComment(c.CommentId))">
+                                <p>Comment?</p>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row cursorPointer onHoverText d-flex justify-content-between">
 
-                        <div class="col-md-6 cursorPointer">
-                            <p>@c.Comment</p>
+                            <div class="col">@c.CommentCreated</div>
+                            <div class="col-2">@c.UserModel.Username</div>
                         </div>
-                        <div class="col-md-4 commentButton" @onclick="(()=>OpenChildComment(c.CommentId))">
-                            <p >Comment?</p>
-                        </div>
+
 
                         <div>
                         </div>
@@ -60,7 +69,11 @@
                                 <div class="col-md-4 commentButton" @onclick="(()=>OpenChildComment(child.CommentId))">
                                     <p>Comment?</p>
                                 </div>
+                                <div class="row cursorPointer onHoverText d-flex justify-content-between">
 
+                                    <div class="col">@c.CommentCreated</div>
+                                    <div class="col-2">@c.UserModel.Username</div>
+                                </div>
                                 <div>
                                 </div>
                                 @if (childCommentModel.CommentParentId == c.CommentId)
@@ -137,12 +150,16 @@
         commentDisplay = "none";
 
         _navManager.NavigateTo("/posts/" + postId, true);
-        
+
     }
 
     protected override void OnInitialized()
     {
         allComments = _commentService.GetAllComments(postId);
+        @foreach(var comment in allComments)
+        {
+            comment.UserModel = _userService.GetUser(comment.UserId);
+        }
         allChildComments = _commentService.GetAllComments(postId);
         commentDisplay ="none";
     }

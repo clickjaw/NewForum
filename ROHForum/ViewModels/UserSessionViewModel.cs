@@ -11,6 +11,9 @@ namespace ViewModels
     {
         public string Username { get; set; }
         public int UserId { get; set; }
+
+        public int TotalUpvotes { get; set; }
+        public int TotalDownvotes { get; set; }
         
 
 

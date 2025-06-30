@@ -10,7 +10,7 @@ namespace ROHForum.Data.Models
         public string? Body { get; set; }
         public string? Tags { get; set; }
         public int UserId { get; set; }
-        public DateTime PostCreated { get; set; } = DateTime.Now;
+        public DateTime PostCreated { get; set; }
         public int Upvote { get; set; }
         public int Downvote { get; set; }
         public int VoteDifference { get; set; }
