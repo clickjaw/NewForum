@@ -1,0 +1,15 @@
+﻿
+
+
+
+
+
+@code{
+    public List<PostsModel> userPosts = new();
+
+
+    protected override void OnInitialized()
+    {
+        userPosts = _postService.GetPostsByUser(1);
+    }
+}

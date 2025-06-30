@@ -8,7 +8,7 @@ namespace ROHForum.Data.Service
         bool UpdatePostVotes(PostsModel postModel);
         PostsModel GetVoteDifference(PostsModel postsModel);
         List<PostsModel> GetTopPosts();
-
+        List<PostsModel> GetPostsByUser(int userID);
         PostsModel GetSinglePost(int id);
     }
 
@@ -73,7 +73,11 @@ namespace ROHForum.Data.Service
 
             return _postData.GetByID(id);
             
-           
+        }
+
+        public List<PostsModel> GetPostsByUser(int userID)
+        {
+            return _dbContext.Posts.Where(x => x.UserId == userID).ToList();
         }
 
     }

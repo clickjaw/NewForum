@@ -35,6 +35,8 @@ namespace ROHForum.Data.Service
             }
         }
 
+        
+
         public UserModel GetUser(int id) {
 
             return _dbContext.Users.Where(x=>x.UserId == id).FirstOrDefault();

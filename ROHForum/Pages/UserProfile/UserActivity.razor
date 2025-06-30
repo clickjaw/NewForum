@@ -1,0 +1,59 @@
+﻿
+
+<h1>user activity</h1>
+
+<div class="container m-2 p-4" style="border:solid black 5px;">
+    <ul class="nav col">
+        <li class="nav-item">
+            <div class="dropdown">
+                <button class="customButton mx-2 px-4" @onclick="PostToggle">Your Posts</button>
+
+            </div>
+        </li>
+        <li class="nav-item">
+            <div class="dropdown">
+                <button class="customButton mx-2 px-4" @onclick="UpvoteToggle">Your Upvotes</button>
+
+            </div>
+        </li>
+    </ul>
+
+    <div>
+        <div class="m-2 p-4" style="display: @postDisplay;">
+            <div>
+                <UserPosts/>
+            </div>
+            
+        </div>
+        <div class="m-2 p-4" style="display: @upvoteDisplay;">
+            updoots
+        </div>
+    </div>
+</div>
+
+@code{
+    public string postDisplay;
+    public string upvoteDisplay;
+
+    protected override void OnInitialized()
+    {
+        postDisplay = "block";
+        upvoteDisplay = "none";
+
+    }
+
+    public void UpvoteToggle()
+    {
+        postDisplay = "none";
+        upvoteDisplay = "block";
+
+    }
+
+    public void PostToggle()
+    {
+        postDisplay = "block";
+        upvoteDisplay = "none";
+
+    }
+
+}

@@ -17,22 +17,43 @@
     </li>
 
 </ul>
+<ul class="nav col">
+    <li class="nav-item">
+        <div class="dropdown">
+            <button class="customButton mx-2 px-4">Your Communities</button>
+            <div class="dropdown-content">
+
+
+                @foreach (var tag in allTags)
+                {
+                    <button class="customButton my-2 px-4" @onclick='()=> _navManager.NavigateTo("/posts/tag/" + tag.TagName)'>@tag.TagName</button>
+
+                }
+
+            </div>
+        </div>
+    </li>
+
+</ul>
 <ul class="nav justify-content-end">
     <li class="nav-item">
         <button class="px-4 mx-2 customButton" aria-current="page" @onclick='()=> _navManager.NavigateTo("/")'>Home</button>
     </li>
     <li class="nav-item">
+        <button class="px-4 mx-2 customButton" @onclick='()=> _navManager.NavigateTo("/user/home")'>Your Profile</button>
+    </li>
+   @*  <li class="nav-item">
         <button class="px-4 mx-2 customButton" @onclick="GoToTopPosts">Top Posts</button>
     </li>
     <li class="nav-item">
-        <button class="px-4 mx-2 customButton" href="#">New Posts</button>
-    </li>
+        <button class="px-4 mx-2 customButton" @onclick='()=> _navManager.NavigateTo("/posts/new")'>New Posts</button>
+    </li> *@
     <li class="nav-item">
         <div class="dropdown">
             <button class="customButton mx-2 px-4">Posts</button>
             <div class="dropdown-content">
                 <button class="customButton my-2 px-4 " @onclick='()=> _navManager.NavigateTo("/posts/top")'>Top Posts</button>
-                <button class="customButton my-2 px-4" href="#">New Posts</button>
+                <button class="customButton my-2 px-4" @onclick='()=> _navManager.NavigateTo("/posts/new")'>New Posts</button>
                 <button class="customButton my-2 px-4" href="#">Best Posts</button>
             </div>
         </div>
