@@ -5,7 +5,8 @@ namespace ROHForum.Data.Service
     public interface ICommentService
     {
         bool AddComment(CommentsModel commentModel);
-        bool UpdatePostVotes(PostsModel postModel);
+        bool UpdateCommentUpvotes(CommentsModel commentModel);
+        bool UpdateCommentDownvotes(CommentsModel commentModel);
         PostsModel GetVoteDifference(PostsModel postsModel);
         List<CommentsModel> GetAllComments(int postId);
 
@@ -17,10 +18,14 @@ namespace ROHForum.Data.Service
     {
         private readonly DatabaseContext _dbContext;
         private readonly IPostData _postData;
-        public CommentService(DatabaseContext dbContext, IPostData postData)
+        private readonly ICommentData _commentData;
+        private readonly IUserService _userService;
+        public CommentService(DatabaseContext dbContext, IPostData postData, ICommentData commentData, IUserService userService)
         {
             _dbContext = dbContext;
             _postData = postData;
+            _commentData = commentData;
+            _userService = userService;
         }
 
         public bool AddComment(CommentsModel commentModel)
@@ -41,13 +46,15 @@ namespace ROHForum.Data.Service
             }
         }
 
-        public bool UpdatePostVotes(PostsModel postModel)
+        public bool UpdateCommentUpvotes(CommentsModel commentModel)
         {
             try
             {
-                _postData.UpdatePostVotes(postModel);
+                _commentData.UpdateCommentUpvotes(commentModel);
+                
+                _userService.UpdateUserUpvotes(commentModel.UserId);
 
-                GetVoteDifference(postModel);
+                // GetVoteDifference(commentModel);
 
                 _dbContext.SaveChanges();
                 return true;
@@ -58,6 +65,28 @@ namespace ROHForum.Data.Service
                 return false;
             }
         }
+
+        public bool UpdateCommentDownvotes(CommentsModel commentModel)
+        {
+            try
+            {
+                _commentData.UpdateCommentDownvotes(commentModel);
+
+                _userService.UpdateUserDownvotes(commentModel.UserId);
+
+                // GetVoteDifference(commentModel);
+
+                _dbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
+        }
+
+
 
         public List<CommentsModel> GetAllComments(int postId)
         {
@@ -77,6 +106,13 @@ namespace ROHForum.Data.Service
 
             return postModel;
         }
+
+        /*public PostsModel GetVoteDifferenceComments(CommentsModel commentModel)
+        {
+            postModel.VoteDifference = postModel.Upvote - postModel.Downvote;
+
+            return postModel;
+        }*/
 
         public PostsModel GetSinglePost(int id)
         {

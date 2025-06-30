@@ -63,10 +63,12 @@
         postModel.Upvote++;
         _postService.UpdatePostVotes(postModel);
         posts = _postService.GetTopPosts();
-        UserInformation.userUpvotes++;
+        _userService.UpdateUserUpvotes(postModel.UserId);
         StateHasChanged();
 
     }
+
+
 
     public void downvoteClicker(PostsModel postModel)
     {
@@ -74,6 +76,8 @@
         postModel.Downvote++;
         _postService.UpdatePostVotes(postModel);
         posts = _postService.GetTopPosts();
+        _userService.UpdateUserDownvotes(postModel.UserId);
+
         StateHasChanged();
 
 

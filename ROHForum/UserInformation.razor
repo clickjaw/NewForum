@@ -55,13 +55,12 @@ else
         UserModel user = _userService.GetUserByUsername(userModel.Username);
         List<PostsModel> userPosts = _postService.GetPostsByUser(user.UserId);
 
-        user.TotalDownvotes = 0;
-        user.TotalUpvotes = 0;
-        @foreach (var post in userPosts)
-        {
-            user.TotalUpvotes += post.Upvote;
-            user.TotalDownvotes += post.Downvote;
-        }
+       
+        // @foreach (var post in userPosts)
+        // {
+        //     user.TotalUpvotes += post.Upvote;
+        //     user.TotalDownvotes += post.Downvote;
+        // }
 
         isLoaded = true;
         userNameParent = userModel.Username;

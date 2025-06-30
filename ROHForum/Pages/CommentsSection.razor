@@ -17,18 +17,18 @@
             {@if(c.CommentParentId < 1){
                     <div class="row p-2 m-2 postBorder">
                         <div class="col-md-2">
-                            <div class="row"><img class="upvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowUp.png" /> @c.Upvote</div>
+                            <div class="row"><img class="upvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowUp.png" @onclick="()=>upvoteClicker(c)" /> @c.Upvote</div>
 
-                            <div class="row"><img class="downvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowDown.png" /> @c.Downvote</div>
+                            <div class="row"><img class="downvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowDown.png" @onclick="()=>downvoteClicker(c)" /> @c.Downvote</div>
                         </div>
                         <div class="col">
                             <div class="row">
-                            <div class="col-md-6 cursorPointer">
-                                <p>@c.Comment</p>
-                            </div>
-                            <div class="col-md-4 commentButton" @onclick="(()=>OpenChildComment(c.CommentId))">
-                                <p>Comment?</p>
-                            </div>
+                                <div class="col-md-6 cursorPointer">
+                                    <p>@c.Comment</p>
+                                </div>
+                                <div class="col-md-4 commentButton" @onclick="(()=>OpenChildComment(c.CommentId))">
+                                    <p>Comment?</p>
+                                </div>
                             </div>
                         </div>
                         <div class="row cursorPointer onHoverText d-flex justify-content-between">
@@ -150,6 +150,30 @@
         commentDisplay = "none";
 
         _navManager.NavigateTo("/posts/" + postId, true);
+
+    }
+
+    public void upvoteClicker(CommentsModel commentModel)
+    {
+
+        commentModel.Upvote++;
+        _commentService.UpdateCommentUpvotes(commentModel);
+        
+
+        //posts = _postService.GetTopPosts();
+        StateHasChanged();
+
+    }
+
+    public void downvoteClicker(CommentsModel commentModel)
+    {
+
+        commentModel.Downvote++;
+        _commentService.UpdateCommentDownvotes(commentModel);
+
+
+        //posts = _postService.GetTopPosts();
+        StateHasChanged();
 
     }
 

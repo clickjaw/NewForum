@@ -8,6 +8,8 @@ namespace ROHForum.Data.Service
         public UserModel ValidateUser(UserModel userModel);
         public bool AddNewUser(UserModel newModel);
         public UserModel GetUserByUsername(string userName);
+        public bool UpdateUserUpvotes(int id);
+        public bool UpdateUserDownvotes(int id);
     }
 
     public class UserService : IUserService
@@ -45,6 +47,24 @@ namespace ROHForum.Data.Service
         public UserModel GetUserByUsername(string userName)
         {
             return _dbContext.Users.Where(x => x.Username == userName).FirstOrDefault();
+
+        }
+
+        public bool UpdateUserUpvotes(int id)
+        {
+            UserModel userModel = GetUser(id);
+            userModel.TotalUpvotes++;
+            _dbContext.SaveChanges();
+            return true;
+            
+        }
+
+        public bool UpdateUserDownvotes(int id)
+        {
+            UserModel userModel = GetUser(id);
+            userModel.TotalDownvotes++;
+            _dbContext.SaveChanges();
+            return true;
 
         }
 
