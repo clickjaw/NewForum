@@ -39,10 +39,10 @@
 
 
 @code {
-    PostsModel newPost = new()
-    {
-        UserId = 1
-    };
+    [CascadingParameter]
+    public UserInformation UserInformation{ get; set; }
+
+    PostsModel newPost = new();
 
 
     TagModel tagModel = new();
@@ -53,6 +53,7 @@
 
         userModel = userService.GetUser(newPost.UserId);
         newPost.UserModel = userModel;
+        newPost.UserId = UserInformation.userIdParent;
         postService.AddPost(newPost);
         tagModel.TagName = newPost.Tags;
         _tagService.AddNewTag(tagModel);

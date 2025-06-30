@@ -16,5 +16,7 @@ namespace ROHForum.Data.Models
 
         public List<CommentsModel> UserComments { get; set; }
         public List<PostsModel> UserPosts { get; set; }
+
+       
     }
 }

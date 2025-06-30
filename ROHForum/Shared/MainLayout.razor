@@ -1,28 +1,43 @@
-﻿@inherits LayoutComponentBase
+﻿@page "/mainlayout/{paramId}"
+@inherits LayoutComponentBase
+
 
 <PageTitle>ROHForum</PageTitle>
 
-<div class="page ">
-    
+<UserInformation>
 
-    <main>
-        <div class="top-row px-4" style="background-color:white; border:none;">
-            <CustomNavMenu />
-            <AddNewPost />
-        </div>
+    <div class="page ">
+
+        <main>
+            <div class="top-row px-4" style="background-color:white; border:none;">
+                <CustomNavMenu />
+                <AddNewPost />
+            </div>
 
 
 
-        <article class="content px-4 ">
-            @Body
-        </article>
-    </main>
-</div>
+            <article class="content px-4 ">
+                @Body
+            </article>
+        </main>
+    </div>
+
+</UserInformation>
+
 
 @code{
+    [CascadingParameter]
+    public UserInformation UserInformation{ get; set; }
 
- 
+
+    protected override void OnInitialized()
+    {
+
+        //var test = UserInformation.userNameParent;
+        //cascadeUserName = "";
+        //UserModel userModel = _userService.GetUserByUsername(cascadeUserName);
 
 
 
+    }
 }

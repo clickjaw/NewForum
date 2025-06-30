@@ -15,67 +15,67 @@
         {
             @foreach(var c in allComments)
             {@if(c.CommentParentId < 1){
-                <div class="row p-2 m-2 postBorder">
-                    <div class="col-md-2">
-                        <div class="row"><img class="upvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowUp.png" /> @c.Upvote</div>
+                    <div class="row p-2 m-2 postBorder">
+                        <div class="col-md-2">
+                            <div class="row"><img class="upvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowUp.png" /> @c.Upvote</div>
 
-                        <div class="row"><img class="downvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowDown.png" /> @c.Downvote</div>
-                    </div>
-
-                    <div class="col-md-6 cursorPointer">
-                        <p>@c.Comment</p>
-                    </div>
-                    <div class="col-md-4 commentButton" @onclick="(()=>OpenChildComment(c.CommentId))">
-                        <p >Comment?</p>
-                    </div>
-
-                    <div>
-                    </div>
-                    @if (childCommentModel.CommentParentId == c.CommentId)
-                    {
-                        <div style="display:@commentDisplay">
-                            <EditForm Model="@childCommentModel" OnValidSubmit="SaveChildComment" Context="formContext">
-                                <InputText @bind-Value=childCommentModel.Comment/>
-
-                                <button type="submit">Save Child Comment</button>
-                            </EditForm>
+                            <div class="row"><img class="downvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowDown.png" /> @c.Downvote</div>
                         </div>
-                    }
-                </div>
-                
-                @foreach(var child in allChildComments)
-                {
-                    if(child.CommentParentId == c.CommentId)
+
+                        <div class="col-md-6 cursorPointer">
+                            <p>@c.Comment</p>
+                        </div>
+                        <div class="col-md-4 commentButton" @onclick="(()=>OpenChildComment(c.CommentId))">
+                            <p >Comment?</p>
+                        </div>
+
+                        <div>
+                        </div>
+                        @if (childCommentModel.CommentParentId == c.CommentId)
+                        {
+                            <div style="display:@commentDisplay">
+                                <EditForm Model="@childCommentModel" OnValidSubmit="SaveChildComment" Context="formContext">
+                                    <InputText @bind-Value=childCommentModel.Comment/>
+
+                                    <button type="submit">Save Child Comment</button>
+                                </EditForm>
+                            </div>
+                        }
+                    </div>
+
+                    @foreach(var child in allChildComments)
                     {
-                        <div class="row p-2 ms-5 me-2 postBorder  " >
-                            <div class="col-md-2">
-                                <div class="row"><img class="upvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowUp.png" /> @child.Upvote</div>
+                        if(child.CommentParentId == c.CommentId)
+                        {
+                            <div class="row p-2 ms-5 me-2 postBorder  " >
+                                <div class="col-md-2">
+                                    <div class="row"><img class="upvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowUp.png" /> @child.Upvote</div>
 
-                                <div class="row"><img class="downvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowDown.png" /> @child.Downvote</div>
-                            </div>
-
-                            <div class="col-md-6 cursorPointer">
-                                <p>@child.Comment</p>
-                            </div>
-                            <div class="col-md-4 commentButton" @onclick="(()=>OpenChildComment(child.CommentId))">
-                                <p>Comment?</p>
-                            </div>
-
-                            <div>
-                            </div>
-                            @if (childCommentModel.CommentParentId == c.CommentId)
-                            {
-                                <div style="display:@commentDisplay">
-                                    <EditForm Model="@childCommentModel" OnValidSubmit="SaveChildComment" Context="formContext">
-                                        <InputText @bind-Value=childCommentModel.Comment />
-
-                                        <button type="submit">Save Child Comment</button>
-                                    </EditForm>
+                                    <div class="row"><img class="downvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowDown.png" /> @child.Downvote</div>
                                 </div>
-                            }
-                        </div>
+
+                                <div class="col-md-6 cursorPointer">
+                                    <p>@child.Comment</p>
+                                </div>
+                                <div class="col-md-4 commentButton" @onclick="(()=>OpenChildComment(child.CommentId))">
+                                    <p>Comment?</p>
+                                </div>
+
+                                <div>
+                                </div>
+                                @if (childCommentModel.CommentParentId == c.CommentId)
+                                {
+                                    <div style="display:@commentDisplay">
+                                        <EditForm Model="@childCommentModel" OnValidSubmit="SaveChildComment" Context="formContext">
+                                            <InputText @bind-Value=childCommentModel.Comment />
+
+                                            <button type="submit">Save Child Comment</button>
+                                        </EditForm>
+                                    </div>
+                                }
+                            </div>
+                        }
                     }
-                }
                 }
             }
 
@@ -91,6 +91,9 @@
 
 
 @code{
+    [CascadingParameter]
+    public UserInformation UserInformation{ get; set; }
+
     [Parameter]
     public int postId { get; set; }
 
@@ -105,7 +108,7 @@
     {
         postModel = _postService.GetSinglePost(postId);
         commentModel.CommentCreated = DateTime.Now;
-        commentModel.UserId = @postModel.UserId;
+        commentModel.UserId = UserInformation.userIdParent;
         commentModel.PostId = postId;
 
         _commentService.AddComment(commentModel);

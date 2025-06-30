@@ -1,4 +1,8 @@
 ﻿@page "/"
+@using ROHForum.Authentication
+@using ViewModels
+@inject AuthenticationStateProvider authStateProvider
+
 @layout BlankPage
 
 
@@ -15,12 +19,12 @@
 
                         <button type="button" class="px-4 mx-2 customButton" @onclick="ToggleNewUser">New User?</button>
                     </div>
-                <div class="col-md-3"><button class="px-4 mx-2 customButtonLogin" type="submit">Login</button></div>
-                
+                    <div class="col-md-3"><button class="px-4 mx-2 customButtonLogin" type="submit">Login</button></div>
+
                 </div>
             </div>
 
-            
+
 
 
         </div>
@@ -45,19 +49,21 @@
 
 <style>
     .valid.modified:not([type=checkbox]){
-        outline:none;
+    outline:none;
     }
 </style>
 
 @code {
+
     public UserModel user = new();
     public UserModel newUser = new();
     public UserModel validateUser = new();
+    public UserSessionViewModel userSessionViewModel = new();
 
     public string? toggleFormLogin;
     public string? toggleFormNewUser;
 
-    public void LoginUser()
+    public async Task LoginUser()
     {
         if (user is not null)
         {
@@ -70,9 +76,12 @@
 
         if (validateUser.Username is not null)
         {
-            user.Username = "";
-            user.Password = "";
-            _navManager.NavigateTo("/home");
+            userSessionViewModel.Username = user.Username;
+            userSessionViewModel.UserId = user.UserId;
+            var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+            await customAuthStateProvider.UpdateAuthenticationState(userSessionViewModel);
+
+            _navManager.NavigateTo("/home/"+ user.Username);
         }
         else
         {
@@ -97,7 +106,7 @@
 
     }
 
-   
+
 
     public void ReturnToLogin()
     {
@@ -114,6 +123,7 @@
     {
         toggleFormLogin = "block";
         toggleFormNewUser = "none";
+
     }
 
 

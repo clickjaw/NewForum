@@ -40,9 +40,9 @@
         <button class="px-4 mx-2 customButton" aria-current="page" @onclick='()=> _navManager.NavigateTo("/")'>Home</button>
     </li>
     <li class="nav-item">
-        <button class="px-4 mx-2 customButton" @onclick='()=> _navManager.NavigateTo("/user/home")'>Your Profile</button>
+        <button class="px-4 mx-2 customButton" @onclick='()=> _navManager.NavigateTo("/user/home/")'>@UserInformation.userNameParent 's Profile</button>
     </li>
-   @*  <li class="nav-item">
+    @*  <li class="nav-item">
         <button class="px-4 mx-2 customButton" @onclick="GoToTopPosts">Top Posts</button>
     </li>
     <li class="nav-item">
@@ -64,6 +64,10 @@
 
 
 @code {
+
+    [CascadingParameter]
+    public UserInformation UserInformation{ get; set; }
+
     public List<TagModel> allTags = new();
 
     public void GoToTopPosts()
@@ -76,7 +80,7 @@
         allTags = _tagService.GetAllTagPosts();
     }
 
-    
+
 
 }
 

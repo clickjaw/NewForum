@@ -1,4 +1,4 @@
-﻿@page "/home"
+﻿@page "/home/{paramId}"
 @inject NavigationManager _navManager
 
 
@@ -8,32 +8,30 @@
     <div>
         <h1>Homepage</h1>
     </div>
-   @*  <div>
-        <div>Font Size: @doubleFont</div>
-        <div style="font-size:@doubleFont" @onclick="(()=>DoubleFontSize(doubleNum))">
-            Homepage
-        </div>
+    <h1>paramId: @paramId</h1>
+    <h1>cascadingParam: @UserInformation.userNameParent</h1>
 
-    </div>
-    <div style="background-color: yellow; width:50px; height: 50px;" @onclick="AddLetter">
-        @foreach(var i in Letters)
-        {
-            <p>@i</p>
-        }
-    </div> *@
 </div>
 
 @code{
+    [CascadingParameter]
+    UserInformation UserInformation{ get; set; }
+
+    [Parameter]
+    public string paramId { get; set; }
+
+
     public string doubleFont = "12px";
     public int doubleNum;
     public int totalNum;
     public string doubleLetter;
     public List<string> Letters = new();
 
-    
+
 
     protected override void OnInitialized()
     {
+        var test = UserInformation.userNameParent;
         doubleNum = 12;
     }
 

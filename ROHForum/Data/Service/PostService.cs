@@ -75,6 +75,8 @@ namespace ROHForum.Data.Service
             
         }
 
+
+
         public List<PostsModel> GetPostsByUser(int userID)
         {
             return _dbContext.Posts.Where(x => x.UserId == userID).ToList();

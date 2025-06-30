@@ -9,6 +9,7 @@ namespace ROHForum.Data.Service
         PostsModel GetVoteDifference(PostsModel postsModel);
         List<CommentsModel> GetAllComments(int postId);
 
+        List<CommentsModel> GetCommentsByUser(int userId);
         PostsModel GetSinglePost(int id);
     }
 
@@ -62,6 +63,13 @@ namespace ROHForum.Data.Service
         {
             return _dbContext.Comments.OrderByDescending(x => x.Upvote).Where(x=>x.PostId == postId).ToList();
         }
+
+        public List<CommentsModel> GetCommentsByUser(int userId)
+        {
+            return _dbContext.Comments.OrderByDescending(x => x.CommentCreated).Where(x => x.UserId == userId).ToList();
+
+        }
+
 
         public PostsModel GetVoteDifference(PostsModel postModel)
         {

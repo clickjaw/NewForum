@@ -1,0 +1,57 @@
+﻿<div class="container">
+    @if (userComments.Count() > 0)
+    {
+        @foreach (var comment in userComments)
+        {
+            <div class="row p-2 m-2 postBorder">
+                <div class="col-md-2">
+                    <div class="row"><img class="upvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowUp.png" /> @comment.Upvote</div>
+
+                    <div class="row"><img class="downvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowDown.png" /> @comment.Downvote</div>
+                </div>
+                <div class="col-md-9 ">
+                    <div class="row cursorPointer onHoverText"><p class="col" @onclick='(()=>_navManager.NavigateTo($"/posts/{comment.PostsModel.PostId}"))'>@comment.Comment</p><div class="col" @onclick='(()=>_navManager.NavigateTo($"/posts/tag/{comment.PostsModel.Tags}"))'>@comment.PostsModel.Tags</div></div>
+                    
+
+                    <div class="row cursorPointer onHoverText d-flex justify-content-between" @onclick='(()=>_navManager.NavigateTo($"/posts/{comment.PostsModel.Title}"))'>
+                        
+                        <div class="col">@comment.PostsModel.Title</div>
+
+                        <div class="col-3">@comment.CommentCreated</div>
+
+
+
+                    </div>
+                </div>
+
+                <div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div><h2>You haven't commented yet.'</h2></div>
+    }
+
+</div>
+
+
+
+@code {
+    [CascadingParameter]
+    public UserInformation UserInformation { get; set; }
+    public List<CommentsModel> userComments = new();
+    public PostsModel postModel = new();
+
+
+    protected override void OnInitialized()
+    {
+
+        userComments = _commentService.GetCommentsByUser(UserInformation.userIdParent);
+        @foreach(var comment in userComments)
+        {
+            comment.PostsModel = _postService.GetSinglePost(comment.PostId);
+        }
+    }
+}
