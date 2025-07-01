@@ -109,7 +109,6 @@
 
             userSessionViewModel.Username = newUser.Username;
             userSessionViewModel.UserId = newUser.UserId;
-            userSessionViewModel.TotalUpvotes = 1;
             var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
             await customAuthStateProvider.UpdateAuthenticationState(userSessionViewModel);
 
