@@ -1,0 +1,124 @@
+﻿@page "/test/posts"
+@using Microsoft.AspNetCore.Mvc
+
+<div class="">
+
+
+
+    <div class="container p-3">
+        <h1>Top Content</h1>
+        @if (TotalPages > 1)
+        {
+            <nav aria-label="" class="d-flex justify-content-center">
+                <ul class="pagination">
+                    <li class="page-item @(ShowPrevious ? "" : "disabled")">
+                        <a class="page-link" asp-page="/test/posts" @onclick="(()=>DoPrevious())" asp-route-currentPage="@(CurrentPage - 1)">Previous</a>
+                    </li>
+                    @for (int i = 1; i <= TotalPages; i++)
+                    {
+                        <li class="page-item @(i == CurrentPage ? "active" : "")">
+                            <a disabled class="page-link" href="/test/posts" @onclick="(()=>DoSomethingElse(i))" asp-route-currentPage="@i">@i</a>
+                        </li>
+                    }
+                    <li class="page-item @(ShowNext ? "" : "disabled")">
+                        <a class="page-link" href="/test/posts" @onclick="(()=>DoNext())" asp-route-currentPage="@(CurrentPage + 1)">Next</a>
+                    </li>
+                </ul>
+            </nav>
+
+        }
+        @foreach (var post in Items)
+        {
+            <div class="border border-dark">@post.Title</div>
+
+
+        }
+    </div>
+
+
+</div>
+
+@code {
+    [CascadingParameter]
+    public UserInformation UserInformation { get; set; }
+
+    public List<PostsModel> posts = new();
+    public int postCount = 0;
+    public int increasePostCount;
+
+    public int CurrentPage { get; set; }
+
+    public int PageSize{ get; set; } = 5;
+    public int TotalPages => (int)Math.Ceiling((double)posts.Count() / PageSize);
+    public bool ShowPrevious => CurrentPage > 1;
+    public bool ShowNext => CurrentPage < TotalPages;
+    public IEnumerable<PostsModel> Items { get; set; }
+
+
+
+    protected override void OnInitialized()
+    {
+        var updoot = UserInformation.userUpvotes;
+        posts = _postService.GetTopPosts();
+        postCount = posts.Count();
+        increasePostCount = 0;
+        CurrentPage = 1;
+        var skip = (CurrentPage -1 ) * PageSize;
+        Items = posts.Skip(skip).Take(PageSize).ToList();
+
+    }
+
+    public void DoNext()
+    {
+
+        var skip = CurrentPage * PageSize;
+        Items = posts.Skip(skip).Take(PageSize).ToList();
+        CurrentPage++;
+    }
+
+    public void DoPrevious()
+    {
+        CurrentPage--;
+        var skip = (CurrentPage-1) * PageSize;
+        Items = posts.Skip(skip).Take(PageSize).ToList();
+        
+    }
+
+
+    public void DoSomethingElse(int i)
+    {
+        //var skip = (i - 1) * PageSize;
+        Items = posts.Skip(i-1).Take(PageSize).ToList();
+    }
+
+    public void upvoteClicker(PostsModel postModel)
+    {
+
+        postModel.Upvote++;
+        _postService.UpdatePostVotes(postModel);
+        posts = _postService.GetTopPosts();
+        _userService.UpdateUserUpvotes(postModel.UserId);
+        StateHasChanged();
+
+    }
+
+
+
+    public void downvoteClicker(PostsModel postModel)
+    {
+
+        postModel.Downvote++;
+        _postService.UpdatePostVotes(postModel);
+        posts = _postService.GetTopPosts();
+        _userService.UpdateUserDownvotes(postModel.UserId);
+
+        StateHasChanged();
+
+
+    }
+}
+
+
+
+
+
