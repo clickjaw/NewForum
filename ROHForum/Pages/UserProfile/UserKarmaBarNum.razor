@@ -1,20 +1,14 @@
-﻿<div>
-    <div class="row">
-        <img class="upvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/greenArrowUp.png" />
-        Total Post Upvotes: @userModel.TotalUpvotes
+﻿<div mt-5>
+    <div class="miniBar">
+        <div class="miniBarProgress ps-3" style="left: 0; width: @upvoteBar; background-color: green; color:white;">@upvoteBar Positive</div>
+        <div class="miniBarProgress ps-3" style="left: @upvoteBar; width: @downvoteBar; background-color: red; color:white;">@downvoteBar Negative</div>
     </div>
-    <div class="row">
-        <img class="downvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/redArrowDown.png" />
-        Total Post Downvotes: - @userModel.TotalDownvotes
-    </div>
-
-   <UserKarmaBarNum/>
-   
 </div>
 
-@code{
+
+@code {
     [CascadingParameter]
-    public UserInformation UserInformation{ get; set; }
+    public UserInformation UserInformation { get; set; }
 
     public List<PostsModel> userPosts = new();
     UserModel userModel = new();
@@ -34,7 +28,7 @@
         userModel = _userService.GetUserByUsername(UserInformation.userNameParent);
         userModel.TotalDownvotes = 0;
         userModel.TotalUpvotes = 0;
-        @foreach(var post in userPosts)
+        @foreach (var post in userPosts)
         {
             userModel.TotalUpvotes += post.Upvote;
             userModel.TotalDownvotes += post.Downvote;
@@ -56,29 +50,29 @@
 
 
     }
-
-
 }
 
-    <style>
+
+<style>
     .progress-bar {
         width: 100px;
         height: 100px;
         border-radius: 50%;
         background: radial-gradient(closest-side, white 79%, transparent 80% 100%), conic-gradient(hotpink 75%, pink 0);
     }
-    
+
     .miniBarProgress {
         height: 100%;
         position: absolute;
         top: 0rem;
         left: 0rem;
+        
     }
 
     .miniBar {
-        height: 2rem;
+        height: 3rem;
         border: 1px solid #8a898a;
-        border-radius:5px;
+        border-radius: 5px;
         padding: 10px;
         position: relative;
         width: -webkit-calc(100% - 2rem);
@@ -86,4 +80,4 @@
         width: calc(100% - 2rem);
         margin-right: 0.5rem;
     }
-    </style>
+</style>
