@@ -9,26 +9,27 @@
 <h3>Add New Post</h3>
 
 
-<div class="container">
+<div class="container d-flex">
     <EditForm Model="@newPost" OnValidSubmit="Save" Context="formContext">
-        <div>
-            <div>
-                <label>Title</label>
-                <InputText @bind-Value="newPost.Title"/>            
+        <div style="width:500px;">
+            <div class="col m-3 p-4 ">
+
+                <label class="row">Title</label>
+                <InputText class="row customButton" style="width:100%; font-size:26px;" @bind-Value="newPost.Title" />
             </div>
-            <div>
-                <label>Body</label>
-                <InputText @bind-Value="newPost.Body" />
+            <div class="col m-3 p-4">
+                <label class="row">Body</label>
+                <InputTextArea class="row customButton" style="width:100%; font-size:26px; border:2px black solid;" @bind-Value="newPost.Body" />
             </div>
-            <div>
-                <label>Tags</label>
-                <InputText @bind-Value="newPost.Tags"/>            
+            <div class="col m-3 p-4">
+                <label class="row">Tags</label>
+                <InputText class="row customButton" style="width:100%; font-size:26px;" @bind-Value="newPost.Tags" />
             </div>
 
 
         </div>
-        <div>
-            <button type="submit">Add New Post</button>
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="customButton">Add New Post</button>
         </div>
 
 

@@ -11,6 +11,7 @@ namespace ROHForum.Data.Service
         List<PostsModel> GetPostsByUser(int userID);
         PostsModel GetSinglePost(int id);
         List<PostsModel> GetPostsByStartingLetters(string search);
+        List<PostsModel> GetNewPosts();
     }
 
     public class PostService : IPostService
@@ -61,6 +62,11 @@ namespace ROHForum.Data.Service
         public List<PostsModel> GetTopPosts()
         {
             return _dbContext.Posts.OrderByDescending(x => x.VoteDifference).ToList();
+        }
+
+        public List<PostsModel> GetNewPosts()
+        {
+            return _dbContext.Posts.OrderByDescending(x => x.PostCreated).ToList();
         }
 
         public List<PostsModel> GetPostsByStartingLetters(string search)

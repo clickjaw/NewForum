@@ -30,12 +30,12 @@
         {
 
 
-           
-             
+
+
 
             <div class="row p-2 m-2 postBorder">
                 <div class="col-md-2">
-                    <div class="row"><img class="upvoteArrow" style="height:100%; width:40px;" @onclick="()=>upvoteClicker(post)" src="/ROHFORUMART/blankArrowUp.png" /> @post.Upvote</div>
+                    <div class="row"><img class="upvoteArrow" style="height:100%; width:40px;" @onclick="()=>upvoteClicker(post)" src="/ROHFORUMART/@defaultUpArrow" /> @post.Upvote</div>
 
                     <div class="row"><img class="downvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowDown.png" @onclick="()=>downvoteClicker(post)" /> @post.Downvote</div>
                 </div>
@@ -83,6 +83,8 @@
     public bool ShowNext => CurrentPage < TotalPages;
     public IEnumerable<PostsModel> Items { get; set; }
 
+    public string defaultUpArrow;
+
     protected override void OnInitialized()
     {
         var updoot = UserInformation.userUpvotes;
@@ -92,6 +94,7 @@
         CurrentPage = 1;
         var skip = (CurrentPage - 1) * PageSize;
         Items = posts.Skip(skip).Take(PageSize).ToList();
+        defaultUpArrow = "blankArrowUp.png";
     }
 
     public void DoNext()
@@ -125,6 +128,8 @@
         _postService.UpdatePostVotes(postModel);
         posts = _postService.GetTopPosts();
         _userService.UpdateUserUpvotes(postModel.UserId);
+        defaultUpArrow = "greenArrowUp.png";
+
         StateHasChanged();
 
     }

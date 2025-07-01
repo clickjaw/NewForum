@@ -6,7 +6,27 @@
 
     <div class="container p-3">
         <h1>Newest Content</h1>
-        @foreach (var post in posts.OrderByDescending(x=>x.PostCreated))
+        @if (TotalPages > 1)
+        {
+            <nav aria-label="" class="d-flex justify-content-center">
+                <ul class="pagination">
+                    <li class="page-item  @(ShowPrevious ? "" : "disabled")">
+                        <a class="page-link" asp-page="/posts/new" @onclick="(()=>DoPrevious())" asp-route-currentPage="@(CurrentPage - 1)">Previous</a>
+                    </li>
+                    @for (int i = 1; i <= TotalPages; i++)
+                    {
+                        <li class="page-item mx-2 @(i == CurrentPage ? "active" : "")">
+                            <a disabled class="page-link" href="/posts/new" @onclick="(()=>DoSomethingElse(i))" asp-route-currentPage="@i">@i</a>
+                        </li>
+                    }
+                    <li class="page-item @(ShowNext ? "" : "disabled")">
+                        <a class="page-link" href="/posts/new" @onclick="(()=>DoNext())" asp-route-currentPage="@(CurrentPage + 1)">Next</a>
+                    </li>
+                </ul>
+            </nav>
+
+        }
+        @foreach (var post in Items)
         {
             <div class="row p-2 m-2 postBorder">
                 <div class="col-md-2">
@@ -46,11 +66,45 @@
 @code {
     public List<PostsModel> posts = new();
     int postCount = 0;
+    public int CurrentPage { get; set; }
+
+    public int PageSize { get; set; } = 5;
+    public int TotalPages => (int)Math.Ceiling((double)posts.Count() / PageSize);
+    public bool ShowPrevious => CurrentPage > 1;
+    public bool ShowNext => CurrentPage < TotalPages;
+    public IEnumerable<PostsModel> Items { get; set; }
 
     protected override void OnInitialized()
     {
-        posts = _postService.GetTopPosts();
+        posts = _postService.GetNewPosts();
+
         postCount = posts.Count();
+        CurrentPage = 1;
+        var skip = (CurrentPage - 1) * PageSize;
+        Items = posts.Skip(skip).Take(PageSize).ToList();
+    }
+
+    public void DoNext()
+    {
+
+        var skip = CurrentPage * PageSize;
+        Items = posts.Skip(skip).Take(PageSize).ToList();
+        CurrentPage++;
+    }
+
+    public void DoPrevious()
+    {
+        CurrentPage--;
+        var skip = (CurrentPage - 1) * PageSize;
+        Items = posts.Skip(skip).Take(PageSize).ToList();
+
+    }
+
+
+    public void DoSomethingElse(int i)
+    {
+        //var skip = (i - 1) * PageSize;
+        Items = posts.Skip(i - 1).Take(PageSize).ToList();
     }
 
     public void upvoteClicker(PostsModel postModel)
@@ -71,7 +125,34 @@
     }
 }
 
+<style>
+    background-color:black;
+    }
 
+    .pagination {
+        background-color: black;
+    }
+
+    .page-link {
+        background-color: none;
+        color: black;
+        border-color: transparent;
+    }
+
+    .page-item.active .page-link {
+        box-shadow: 5px 5px black;
+        background-color: transparent;
+        color: black;
+        border-color: black;
+        border: 2px black solid;
+    }
+
+    .page-link:focus {
+        background-color: none;
+        font-weight: 700;
+        color: black;
+    }
+</style>
 
 
 

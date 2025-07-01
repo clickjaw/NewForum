@@ -19,7 +19,12 @@
         <p>
             <h1>Search results for: @searchModel.Search</h1>
         </p>
-        <div>
+        @if (postSearchToggle == "none" && userSearchToggle == "none" && tagSearchToggle == "none") {
+            <p>
+                <h2>No results found</h2>
+            </p>
+        }
+        <div class="mb-4">
             <ul class="nav col">
                 <li class="nav-item" style="display:@postSearchToggleButton">
                     <div class="dropdown">
@@ -198,23 +203,36 @@
             @if (postSearchResults.Count() > 0)
             {
                 postSearchToggle = "block";
+                postSearchToggleButton = "block";
+            }
+            else
+            {
+                postSearchToggle = "none";
+                postSearchToggleButton = "none";
             }
             @if (userSearchResults.Count() > 0)
             {
+                userSearchToggle = "block";
+
                 userSearchToggleButton = "block";
             }
             else
             {
+                userSearchToggle = "none";
                 userSearchToggleButton = "none";
             }
             @if (tagSearchResults.Count() > 0)
             {
+                tagSearchToggle = "block";
                 tagSearchToggleButton = "block";
             }
             else
             {
+                tagSearchToggle = "none";
                 tagSearchToggleButton = "none";
             }
+
+            
             
         }
     }
