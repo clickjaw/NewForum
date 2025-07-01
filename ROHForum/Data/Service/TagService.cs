@@ -8,6 +8,7 @@ namespace ROHForum.Data.Service
         void AddNewTag(TagModel tagModel);
         List<TagModel> GetAllTagPosts();
         List<PostsModel> GetTagsByUser(int userId);
+        List<TagModel> GetTagsByStartingLetters(string search);
     }
 
     public class TagService : ITagService
@@ -34,6 +35,11 @@ namespace ROHForum.Data.Service
         public List<PostsModel> GetTagsByUser(int userId)
         {
             return _dbContext.Posts.Where(x=>x.UserId == userId).ToList();
+        }
+
+        public List<TagModel> GetTagsByStartingLetters(string search)
+        {
+            return _dbContext.Tags.Where(x=>x.TagName.StartsWith(search)).ToList();
         }
 
         public void AddNewTag(TagModel tagModel)

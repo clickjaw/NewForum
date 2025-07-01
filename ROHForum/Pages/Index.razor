@@ -1,4 +1,5 @@
 ﻿@page "/home/{paramId}"
+@using ROHForum.Data
 @inject NavigationManager _navManager
 
 
@@ -88,10 +89,10 @@
                     <div class="col-md-9 ">
                         <div class="row cursorPointer onHoverText"><p>@user.Username</p></div>
                         <div class="row cursorPointer onHoverText d-flex justify-content-between" >
-                            <div class="col-3">
+                            <div class="">
                                 <ROHForum.Pages.UserProfile.UserKarmaBarSearchResults SearchUser="@user.Username" />
                             </div>
-                           
+
                         </div>
                     </div>
 
@@ -102,6 +103,13 @@
         </div>
         <div style="display:@tagSearchToggle">
             <h2>Tag Search Results</h2>
+            <div>
+                @foreach(var tag in tagSearchResults)
+                {
+                    <button class="customButton mx-2 px-4" @onclick='(()=>_navManager.NavigateTo($"/posts/tag/{tag.TagId}"))'>@tag.TagName</button>
+
+                }
+            </div>
         </div>
     </div>
     <div style="display:@defaultDisplay">
@@ -157,6 +165,7 @@
     public List<string> Letters = new();
     public List<PostsModel> postSearchResults = new();
     public List<UserModel> userSearchResults = new();
+    public List<TagModel> tagSearchResults = new();
     public List<string> searchWord = new();
 
     public string defaultDisplay;
@@ -182,6 +191,7 @@
             searchWord.Add(searchModel.Search);
             postSearchResults = _postService.GetPostsByStartingLetters(searchWord[0]);
             userSearchResults = _userService.GetUsersByStartingLetters(searchWord[0]);
+            tagSearchResults = _tagService.GetTagsByStartingLetters(searchWord[0]);
 
             defaultDisplay = "none";
             searchDisplay = "block";
@@ -196,6 +206,14 @@
             else
             {
                 userSearchToggleButton = "none";
+            }
+            @if (tagSearchResults.Count() > 0)
+            {
+                tagSearchToggleButton = "block";
+            }
+            else
+            {
+                tagSearchToggleButton = "none";
             }
             
         }
