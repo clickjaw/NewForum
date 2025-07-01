@@ -53,6 +53,7 @@ else
             };
 
         UserModel user = _userService.GetUserByUsername(userModel.Username);
+        
         List<PostsModel> userPosts = _postService.GetPostsByUser(user.UserId);
 
        

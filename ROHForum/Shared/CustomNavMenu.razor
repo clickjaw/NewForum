@@ -3,7 +3,7 @@
 
 <ul class="nav me-2">
     <li class="nav-item">
-        @if (UserInformation.userUpvotes > UserInformation.userDownvotes)
+        @if (UserInformation.userUpvotes > UserInformation.userDownvotes )
         {
             <img class="upvoteArrow me-2" style="height:21px; width:16px;" src="/ROHFORUMART/greenArrowUp.png" /> @navbarKarmaTotal
 
@@ -55,7 +55,7 @@
 </ul>
 <ul class=" col-3">
     <li class="nav-item pt-3"><ROHForum.Pages.UserProfile.UserKarmaBar /></li>
-    
+
 </ul>
 
 <ul class="nav">
@@ -113,6 +113,10 @@
 
     protected override void OnInitialized()
     {
+        @if(UserInformation.userUpvotes == 0 && UserInformation.userDownvotes == 0)
+        {
+            UserInformation.userUpvotes = 1;
+        }
         allTags = _tagService.GetAllTagPosts();
         userTags = _tagService.GetTagsByUser(UserInformation.userIdParent);
         userModel = _userService.GetUserByUsername(UserInformation.userNameParent);
