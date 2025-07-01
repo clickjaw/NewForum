@@ -10,6 +10,8 @@ namespace ROHForum.Data.Service
         public UserModel GetUserByUsername(string userName);
         public bool UpdateUserUpvotes(int id);
         public bool UpdateUserDownvotes(int id);
+
+        List<UserModel> GetUsersByStartingLetters(string search);
     }
 
     public class UserService : IUserService
@@ -42,6 +44,12 @@ namespace ROHForum.Data.Service
         public UserModel GetUser(int id) {
 
             return _dbContext.Users.Where(x=>x.UserId == id).FirstOrDefault();
+        }
+
+        public List<UserModel> GetUsersByStartingLetters(string search)
+        {
+            return _dbContext.Users.Where(x => x.Username.StartsWith(search)).ToList();
+
         }
 
         public UserModel GetUserByUsername(string userName)

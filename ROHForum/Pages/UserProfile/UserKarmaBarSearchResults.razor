@@ -1,0 +1,88 @@
+﻿
+
+<div mt-5>
+    <div class="miniBar customButton">
+        <div class="miniBarProgress " style="left: 0; width: @upvoteBar; background-color: #D4F3CE; color:white;"></div>
+        <div class="miniBarProgress" style="left: @upvoteBar; width: @downvoteBar; background-color: #FFD1AD; color:white;"></div>
+    </div>
+</div>
+
+
+@code {
+    [CascadingParameter]
+    public UserInformation UserInformation { get; set; }
+
+    [Parameter]
+    public string SearchUser{ get; set; }
+
+    public List<PostsModel> userPosts = new();
+    UserModel userModel = new();
+
+    public double upvoteBarMath;
+    public double downvoteBarMath;
+    public double totalBarMath;
+
+
+    public string upvoteBar;
+    public string downvoteBar;
+    public string totalBar;
+
+    protected override void OnInitialized()
+    {
+        
+        userModel = _userService.GetUserByUsername(SearchUser);
+        userPosts = _postService.GetPostsByUser(userModel.UserId);
+        userModel.TotalDownvotes = 0;
+        userModel.TotalUpvotes = 0;
+        @foreach (var post in userPosts)
+        {
+            userModel.TotalUpvotes += post.Upvote;
+            userModel.TotalDownvotes += post.Downvote;
+        }
+
+        totalBarMath = userModel.TotalUpvotes + userModel.TotalDownvotes;
+        downvoteBarMath = totalBarMath - userModel.TotalDownvotes;
+        upvoteBarMath = totalBarMath - userModel.TotalUpvotes;
+        double userUpvotes = userModel.TotalUpvotes;
+
+
+        double upvoteFinal = ((userUpvotes / totalBarMath) * 100);
+        double downvoteFinal = ((userModel.TotalDownvotes / totalBarMath) * 100);
+
+        double newUFinal = Math.Round(upvoteFinal, 2);
+        double newDFinal = Math.Round(downvoteFinal, 2);
+        upvoteBar = $"{newUFinal}%";
+        downvoteBar = $"{newDFinal}%";
+
+
+    }
+}
+
+
+<style>
+    .progress-bar {
+        width: 100px;
+        height: 100px;
+        /* border-radius: 50%; */
+        background: radial-gradient(closest-side, white 79%, transparent 80% 100%), conic-gradient(hotpink 75%, pink 0);
+    }
+
+    .miniBarProgress {
+        height: 100%;
+        position: absolute;
+        top: 0rem;
+        left: 0rem;
+    }
+
+    .miniBar {
+        height: .2rem;
+        border: 2px solid black;
+        /* border-radius: 5px; */
+        padding: 10px;
+        position: relative;
+        width: -webkit-calc(100% - 2rem);
+        width: -moz-calc(100% - 2rem);
+        width: calc(100% - 2rem);
+        margin-right: 0.5rem;
+    }
+</style>

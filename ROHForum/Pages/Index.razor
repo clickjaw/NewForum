@@ -11,7 +11,7 @@
             @* <input type="text" class="customButton" @bind="searchModel.Search" @bind:event="oninput" /> *@
 
             <input type="text" class="customButton"  @oninput="UpdateInputValue" />
-            <button type="button" class="customButton" @onclick="(()=>SearchByChar(searchModel.Search))">Search Posts</button>
+            <button type="button" class="customButton">Search Posts</button>
         </EditForm>
     </div>
     <div style="display:@searchDisplay">
@@ -19,6 +19,29 @@
             <h1>Search results for: @searchModel.Search</h1>
         </p>
         <div>
+            <ul class="nav col">
+                <li class="nav-item" style="display:@postSearchToggleButton">
+                    <div class="dropdown">
+                        <button class="customButton mx-2 px-4" @onclick="PostToggle">Post Search</button>
+
+                    </div>
+                </li>
+                <li class="nav-item" style="display:@userSearchToggleButton">
+                    <div class="dropdown">
+                        <button class="customButton mx-2 px-4" @onclick="UserToggle">User Results</button>
+
+                    </div>
+                </li>
+                <li class="nav-item" style="display:@tagSearchToggleButton">
+                    <div class="dropdown">
+                        <button class="customButton mx-2 px-4" @onclick="TagToggle">Tag Results</button>
+
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div style="display:@postSearchToggle">
+            <h2>Post Results</h2>
             @foreach(var post in postSearchResults)
             {
                 <div class="row p-2 m-2 postBorder">
@@ -52,6 +75,34 @@
                 </div>
             }
         </div>
+        <div style="display:@userSearchToggle">
+            <h2>User Search Results</h2>
+            @foreach(var user in userSearchResults)
+            {
+                <div class="row p-2 m-2 postBorder w-50">
+                    <div class="col-md-2">
+                        <div class="row"><img class="upvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowUp.png" /> @user.TotalUpvotes</div>
+
+                        <div class="row"><img class="downvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowDown.png" /> @user.TotalDownvotes</div>
+                    </div>
+                    <div class="col-md-9 ">
+                        <div class="row cursorPointer onHoverText"><p>@user.Username</p></div>
+                        <div class="row cursorPointer onHoverText d-flex justify-content-between" >
+                            <div class="col-3">
+                                <ROHForum.Pages.UserProfile.UserKarmaBarSearchResults SearchUser="@user.Username" />
+                            </div>
+                           
+                        </div>
+                    </div>
+
+                    <div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div style="display:@tagSearchToggle">
+            <h2>Tag Search Results</h2>
+        </div>
     </div>
     <div style="display:@defaultDisplay">
         <div>
@@ -72,23 +123,47 @@
 
     public SearchModel searchModel = new();
 
+    public string postSearchToggle;
+    public string userSearchToggle;
+    public string tagSearchToggle;
+    public string postSearchToggleButton;
+    public string userSearchToggleButton;
+    public string tagSearchToggleButton;
+
+    public void PostToggle()
+    {
+        postSearchToggle = "block";
+        userSearchToggle="none";
+        tagSearchToggle = "none";
+    }
+    public void UserToggle()
+    {
+
+        postSearchToggle = "none";
+        userSearchToggle = "block";
+        tagSearchToggle = "none";
+    }
+    public void TagToggle()
+    {
+
+        postSearchToggle = "none";
+        userSearchToggle="none";
+        tagSearchToggle = "block";}
+
     public string doubleFont = "12px";
     public int doubleNum;
     public int totalNum;
     public string doubleLetter;
     public List<string> Letters = new();
     public List<PostsModel> postSearchResults = new();
+    public List<UserModel> userSearchResults = new();
     public List<string> searchWord = new();
 
     public string defaultDisplay;
     public string searchDisplay;
     private string InputValue { get; set; } = string.Empty;
 
-    public void SearchByChar(string a)
-    {
-        defaultDisplay = "none";
-        searchDisplay = "block";
-    }
+
 
     private void UpdateInputValue(ChangeEventArgs e)
     {
@@ -106,12 +181,27 @@
             }
             searchWord.Add(searchModel.Search);
             postSearchResults = _postService.GetPostsByStartingLetters(searchWord[0]);
+            userSearchResults = _userService.GetUsersByStartingLetters(searchWord[0]);
+
             defaultDisplay = "none";
             searchDisplay = "block";
+            @if (postSearchResults.Count() > 0)
+            {
+                postSearchToggle = "block";
+            }
+            @if (userSearchResults.Count() > 0)
+            {
+                userSearchToggleButton = "block";
+            }
+            else
+            {
+                userSearchToggleButton = "none";
+            }
+            
         }
     }
 
-  
+
 
     protected override void OnInitialized()
     {
@@ -119,6 +209,9 @@
         doubleNum = 12;
         defaultDisplay = "block";
         searchDisplay = "none";
+        postSearchToggle = "block";
+        userSearchToggle = "block";
+        tagSearchToggle = "block";
     }
 
     public void DoubleFontSize(int num)
