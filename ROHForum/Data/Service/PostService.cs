@@ -10,6 +10,7 @@ namespace ROHForum.Data.Service
         List<PostsModel> GetTopPosts();
         List<PostsModel> GetPostsByUser(int userID);
         PostsModel GetSinglePost(int id);
+        List<PostsModel> GetPostsByStartingLetters(string search);
     }
 
     public class PostService : IPostService
@@ -60,6 +61,12 @@ namespace ROHForum.Data.Service
         public List<PostsModel> GetTopPosts()
         {
             return _dbContext.Posts.OrderByDescending(x => x.VoteDifference).ToList();
+        }
+
+        public List<PostsModel> GetPostsByStartingLetters(string search)
+        {
+            return _dbContext.Posts.Where(x=>x.Title.StartsWith(search)).ToList();
+            //return _dbContext.Posts.OrderByDescending(x => x.Title.StartsWith(search)).ToList();
         }
 
         public PostsModel GetVoteDifference(PostsModel postModel)

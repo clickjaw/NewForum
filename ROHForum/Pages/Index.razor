@@ -5,11 +5,61 @@
 <PageTitle>ROH Forum</PageTitle>
 
 <div>
-    <div>
-        <h1>Homepage</h1>
+    <div class="d-flex justify-content-end">
+        <EditForm Model="searchModel" Context="formContext">
+            @* <InputText type="text" class="customButton" @bind-Value="searchModel.Search" @bind:event="oninput" /> *@
+            @* <input type="text" class="customButton" @bind="searchModel.Search" @bind:event="oninput" /> *@
+
+            <input type="text" class="customButton"  @oninput="UpdateInputValue" />
+            <button type="button" class="customButton" @onclick="(()=>SearchByChar(searchModel.Search))">Search Posts</button>
+        </EditForm>
     </div>
-    <h1>paramId: @paramId</h1>
-    <h1>cascadingParam: @UserInformation.userNameParent</h1>
+    <div style="display:@searchDisplay">
+        <p>
+            <h1>Search results for: @searchModel.Search</h1>
+        </p>
+        <div>
+            @foreach(var post in postSearchResults)
+            {
+                <div class="row p-2 m-2 postBorder">
+                    <div class="col-md-2">
+                        <div class="row"><img class="upvoteArrow" style="height:100%; width:40px;"  src="/ROHFORUMART/blankArrowUp.png" /> @post.Upvote</div>
+
+                        <div class="row"><img class="downvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowDown.png"  /> @post.Downvote</div>
+                    </div>
+                    <div class="col-md-9 ">
+                        <div class="row cursorPointer onHoverText" @onclick='(()=>_navManager.NavigateTo($"/posts/{post.PostId}"))'><p>@post.Title</p></div>
+                        <div class="row cursorPointer onHoverText d-flex justify-content-between" @onclick='(()=>_navManager.NavigateTo($"/posts/tag/{post.Tags}"))'>
+                            @if (post.PostComments is not null)
+                            {
+                                <div class="col">@post.PostComments.Count() comment(s)</div>
+                                <div class="col">@post.PostCreated</div>
+                                <div class="col-2">@post.Tags</div>
+
+                            }
+                            else
+                            {
+                                <div class="col">0 comments</div>
+                                <div class="col">@post.PostCreated</div>
+                                <div class="col-2">@post.Tags</div>
+
+                            }
+                        </div>
+                    </div>
+
+                    <div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div style="display:@defaultDisplay">
+        <div>
+            <h1>Homepage</h1>
+        </div>
+        <h1>paramId: @paramId</h1>
+        <h1>cascadingParam: @UserInformation.userNameParent</h1>
+    </div>
 
 </div>
 
@@ -20,19 +70,55 @@
     [Parameter]
     public string paramId { get; set; }
 
+    public SearchModel searchModel = new();
 
     public string doubleFont = "12px";
     public int doubleNum;
     public int totalNum;
     public string doubleLetter;
     public List<string> Letters = new();
+    public List<PostsModel> postSearchResults = new();
+    public List<string> searchWord = new();
 
+    public string defaultDisplay;
+    public string searchDisplay;
+    private string InputValue { get; set; } = string.Empty;
 
+    public void SearchByChar(string a)
+    {
+        defaultDisplay = "none";
+        searchDisplay = "block";
+    }
+
+    private void UpdateInputValue(ChangeEventArgs e)
+    {
+        if (e.Value == String.Empty)
+        {
+            defaultDisplay = "block";
+            searchDisplay = "none";
+        }
+        else
+        {
+            searchModel.Search = e.Value?.ToString() ?? string.Empty;
+            if (searchWord.Count() > 0)
+            {
+                searchWord.Remove(searchWord[0]);
+            }
+            searchWord.Add(searchModel.Search);
+            postSearchResults = _postService.GetPostsByStartingLetters(searchWord[0]);
+            defaultDisplay = "none";
+            searchDisplay = "block";
+        }
+    }
+
+  
 
     protected override void OnInitialized()
     {
         var test = UserInformation.userNameParent;
         doubleNum = 12;
+        defaultDisplay = "block";
+        searchDisplay = "none";
     }
 
     public void DoubleFontSize(int num)
