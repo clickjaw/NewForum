@@ -70,15 +70,27 @@ namespace ROHForum.Data.Service
 
         public UserModel ValidateUser(UserModel userModel)
         {
-            UserModel invalidUser = new();
+            UserModel invalidPassword = new()
+            {
+                Password = "InvalidPassword"
+            };
+            UserModel invalidUser = new()
+            {
+                Password = "InvalidUser"
+            };
             UserModel dbUser = GetUserByUsername(userModel.Username);
-            if(dbUser.Password == userModel.Password)
+            if(dbUser is null)
+            {
+                return invalidUser;
+
+            }
+            else if(dbUser.Password == userModel.Password)
             {
                 return dbUser;
 ;            }
             else
             {
-                return invalidUser;
+                return invalidPassword;
             }
 
         }

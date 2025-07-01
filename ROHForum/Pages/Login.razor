@@ -12,8 +12,8 @@
         <div>
             <div style="font-size:26px; display:@toggleFormLogin">
                 <label class="px-4 mx-2 mb-4 loginLabel"><h2>Login</h2></label>
-                <div class="m-4 w-50"><label class="px-4 mx-2 mb-4 loginLabel">Username</label><InputText class="px-4 mx-2 customButton" style="font-size:26px;background-color:white;" @bind-Value="user.Username" /></div>
-                <div class="m-4 w-50"><label class="px-4 mx-2 mb-4 loginLabel">Password</label><InputText type="password" style=" font-size:26px;background-color:white;" class="px-4 mx-2 customButton" @bind-Value="user.Password" /></div>
+                <div class="m-4 w-50"><label class="px-4 mx-2 mb-4 @loginUsername">Username</label><InputText class="px-4 mx-2 customButton" style="font-size:26px;background-color:white;" @bind-Value="user.Username" /></div>
+                <div class="m-4 w-50"><label class="px-4 mx-2 mb-4 @loginPassword">Password</label><InputText type="password" style=" font-size:26px;background-color:white;" class="px-4 mx-2 customButton" @bind-Value="user.Password" /></div>
                 <div class="row">
                     <div class="col-md-3">
 
@@ -63,6 +63,9 @@
     public string? toggleFormLogin;
     public string? toggleFormNewUser;
 
+    public string? loginUsername;
+    public string? loginPassword;
+
     public async Task LoginUser()
     {
         if (user is not null)
@@ -71,11 +74,14 @@
         }
         else
         {
-            ReturnToLogin();
+            loginUsername = "loginLabelError";
+            //ReturnToLogin();
         }
 
         if (validateUser.Username is not null)
         {
+            
+                
             userSessionViewModel.Username = user.Username;
             userSessionViewModel.UserId = user.UserId;
             var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
@@ -85,7 +91,12 @@
         }
         else
         {
-            ReturnToLogin();
+            if (validateUser.Password == "InvalidUser")
+                loginUsername = "loginLabelError";
+            if(validateUser.Password == "InvalidPassword")
+                loginPassword = "loginLabelError";
+
+            //ReturnToLogin();
         }
     }
 
@@ -95,7 +106,7 @@
 
         if (testUser)
         {
-            _navManager.NavigateTo("/home");
+            _navManager.NavigateTo("/home/" + newUser.Username);
         }
         else
         {
@@ -123,6 +134,10 @@
     {
         toggleFormLogin = "block";
         toggleFormNewUser = "none";
+        loginUsername = "loginLabel";
+        loginPassword = "loginLabel";
+
+
 
     }
 
