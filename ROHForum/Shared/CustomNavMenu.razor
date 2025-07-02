@@ -3,12 +3,8 @@
 
 <ul class="nav me-2">
     <li class="nav-item">
-        @if (UserInformation.userUpvotes == 0 && UserInformation.userDownvotes == 0 )
-        {
-            <p>New</p>
-
-        }
-        else if (UserInformation.userUpvotes > UserInformation.userDownvotes )
+        
+        @if (UserInformation.userUpvotes > UserInformation.userDownvotes )
         {
             <img class="upvoteArrow me-2" style="height:21px; width:16px;" src="/ROHFORUMART/greenArrowUp.png" /> @navbarKarmaTotal
 
@@ -67,7 +63,7 @@
 
 <ul class="nav">
     <li class="nav-item">
-        <button class="px-4 mx-2 customKarmaBar" aria-current="page" @onclick='()=> _navManager.NavigateTo("/")'>Home</button>
+        <button class="px-4 mx-2 customKarmaBar" aria-current="page" @onclick='()=> _navManager.NavigateTo("/home/"+UserInformation.userNameParent)'>Home</button>
     </li>
     <li class="nav-item">
         <button class="px-4 mx-2 customKarmaBar" @onclick='()=> _navManager.NavigateTo("/user/home/")'>
@@ -113,7 +109,7 @@
     public List<TagModel> allTags = new();
     public List<PostsModel> userTags = new();
 
-    public int navbarKarmaTotal;
+    public int navbarKarmaTotal =0;
 
     public void GoToTopPosts()
     {

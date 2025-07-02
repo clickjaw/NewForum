@@ -11,8 +11,8 @@
             @* <InputText type="text" class="customButton" @bind-Value="searchModel.Search" @bind:event="oninput" /> *@
             @* <input type="text" class="customButton" @bind="searchModel.Search" @bind:event="oninput" /> *@
 
-            <input type="text" class="customButton"  @oninput="UpdateInputValue" />
-            <button type="button" class="customButton">Search Posts</button>
+            <input type="text" class="customButton" placeholder="Search ROHForum" @oninput="UpdateInputValue" />
+            <button type="button" class="customButton" >Search Posts</button>
         </EditForm>
     </div>
     <div style="display:@searchDisplay">
@@ -111,7 +111,7 @@
             <div>
                 @foreach(var tag in tagSearchResults)
                 {
-                    <button class="customButton mx-2 px-4" @onclick='(()=>_navManager.NavigateTo($"/posts/tag/{tag.TagId}"))'>@tag.TagName</button>
+                    <button class="customButton mx-2 px-4" @onclick='(()=>_navManager.NavigateTo($"/posts/tag/{tag.TagName}"))'>@tag.TagName</button>
 
                 }
             </div>

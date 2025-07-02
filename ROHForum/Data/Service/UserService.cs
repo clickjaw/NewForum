@@ -6,7 +6,7 @@ namespace ROHForum.Data.Service
     {
         public UserModel GetUser(int id);
         public UserModel ValidateUser(UserModel userModel);
-        public bool AddNewUser(UserModel newModel);
+        public UserModel AddNewUser(UserModel newModel);
         public UserModel GetUserByUsername(string userName);
         public bool UpdateUserUpvotes(int id);
         public bool UpdateUserDownvotes(int id);
@@ -23,20 +23,23 @@ namespace ROHForum.Data.Service
             _dbContext = dbContext;
         }
 
-        public bool AddNewUser(UserModel newUser)
+        public UserModel AddNewUser(UserModel newUser)
         {
             if (newUser.Username != String.Empty && newUser.Password != String.Empty)
             {
 
                 _dbContext.Users.Add(newUser);
                 _dbContext.SaveChanges();
-                return true;
+                return newUser;
 
             }
             else
             {
-                return false;
+                UserModel nullModel = new();
+                return nullModel;
             }
+
+           
         }
 
         

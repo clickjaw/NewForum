@@ -7,7 +7,7 @@ namespace ROHForum.Data
     {
     
         public bool UpdateUserUpvotes(UserModel userModel);
-
+        public UserModel GetUserById(int id);
     }
 
     public class UserData : GenericRepository<UserModel>, IUserData
@@ -33,5 +33,11 @@ namespace ROHForum.Data
                 return false;
             }
         }
+
+        public UserModel GetUserById(int id)
+        {
+            return _dbSet.Where(x => x.UserId == id).FirstOrDefault();
+        }
+
     }
 }

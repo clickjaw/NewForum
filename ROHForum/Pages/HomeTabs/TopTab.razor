@@ -40,7 +40,10 @@
                     <div class="row"><img class="downvoteArrow" style="height:100%; width:40px;" src="/ROHFORUMART/blankArrowDown.png" @onclick="()=>downvoteClicker(post)" /> @post.Downvote</div>
                 </div>
                 <div class="col-md-9 ">
-                    <div class="row cursorPointer onHoverText" @onclick='(()=>_navManager.NavigateTo($"/posts/{post.PostId}"))'><p>@post.Title</p></div>
+                    <div class="row cursorPointer onHoverText" @onclick='(()=>_navManager.NavigateTo($"/posts/{post.PostId}"))'>
+                        <p class="col">@post.Title</p>
+                        <p class="col d-flex justify-content-end" >@post.UserModel.Username</p>
+                    </div>
                     <div class="row cursorPointer onHoverText d-flex justify-content-between" @onclick='(()=>_navManager.NavigateTo($"/posts/tag/{post.Tags}"))'>
                         @if(post.PostComments is not null){
                             <div class="col">@post.PostComments.Count() comment(s)</div>

@@ -7,6 +7,7 @@ namespace ROHForum.Data
     {
         public bool UpdateCommentUpvotes(CommentsModel commentModel);
         public bool UpdateCommentDownvotes(CommentsModel commentModel);
+        List<CommentsModel> GetAllComments(int postId);
 
 
     }
@@ -50,6 +51,11 @@ namespace ROHForum.Data
 
                 return false;
             }
+        }
+
+        public List<CommentsModel> GetAllComments(int postId)
+        {
+            return _dbSet.OrderByDescending(x => x.Upvote).Where(x => x.PostId == postId).ToList();
         }
     }
 }

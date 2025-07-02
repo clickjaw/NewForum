@@ -18,10 +18,14 @@ namespace ROHForum.Data.Service
     {
         private readonly DatabaseContext _dbContext;
         private readonly IPostData _postData;
-        public PostService(DatabaseContext dbContext, IPostData postData)
+        private readonly IUserData _userData;
+        private readonly ICommentData _commentData;
+        public PostService(DatabaseContext dbContext, IPostData postData, IUserData userData, ICommentData commentData)
         {
             _dbContext = dbContext;
             _postData = postData;
+            _userData = userData;
+            _commentData = commentData;
         }
 
         public bool AddPost(PostsModel postModel)
@@ -61,7 +65,16 @@ namespace ROHForum.Data.Service
 
         public List<PostsModel> GetTopPosts()
         {
-            return _dbContext.Posts.OrderByDescending(x => x.VoteDifference).ToList();
+            List<PostsModel> returnPosts = _dbContext.Posts.OrderByDescending(x => x.VoteDifference).ToList();
+            foreach (var post in returnPosts) {
+                UserModel userModel = _userData.GetUserById(post.UserId);
+                List<CommentsModel> comments = _commentData.GetAllComments(post.PostId);
+                post.PostComments = comments;
+                post.UserModel = userModel;
+
+            }
+
+            return returnPosts;
         }
 
         public List<PostsModel> GetNewPosts()
@@ -84,8 +97,10 @@ namespace ROHForum.Data.Service
 
         public PostsModel GetSinglePost(int id)
         {
-
-            return _postData.GetByID(id);
+            PostsModel postModel = _postData.GetByID(id);
+            UserModel userModel = _userData.GetUserById(postModel.UserId);
+            postModel.UserModel = userModel;
+            return postModel;
             
         }
 
