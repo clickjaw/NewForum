@@ -10,6 +10,7 @@ namespace ROHForum.Data.Service
         public UserModel GetUserByUsername(string userName);
         public bool UpdateUserUpvotes(int id);
         public bool UpdateUserDownvotes(int id);
+        public List<UserModel> GetAllUsers();
 
         List<UserModel> GetUsersByStartingLetters(string search);
     }
@@ -21,6 +22,11 @@ namespace ROHForum.Data.Service
         public UserService(DatabaseContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        public List<UserModel> GetAllUsers()
+        {
+            return _dbContext.Users.OrderByDescending(x=>x.TotalUpvotes).ToList();
         }
 
         public UserModel AddNewUser(UserModel newUser)

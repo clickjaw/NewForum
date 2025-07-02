@@ -63,7 +63,7 @@
 
 <ul class="nav">
     <li class="nav-item">
-        <button class="px-4 mx-2 customKarmaBar" aria-current="page" @onclick='()=> _navManager.NavigateTo("/home/"+UserInformation.userNameParent)'>Home</button>
+        <button class="px-4 mx-2 customKarmaBar" aria-current="page" @onclick='()=> _navManager.NavigateTo("/home/"+ UserInformation.userNameParent)'>Home</button>
     </li>
     <li class="nav-item">
         <button class="px-4 mx-2 customKarmaBar" @onclick='()=> _navManager.NavigateTo("/user/home/")'>
@@ -88,7 +88,7 @@
             <div class="dropdown-content">
                 <button class="customButton my-2 px-4 " @onclick='()=> _navManager.NavigateTo("/posts/top")'>Top Posts</button>
                 <button class="customButton my-2 px-4" @onclick='()=> _navManager.NavigateTo("/posts/new")'>New Posts</button>
-                <button class="customButton my-2 px-4" href="#">Best Posts</button>
+                <button class="customButton my-2 px-4" @onclick='()=> _navManager.NavigateTo("/users/top")'>Best Users</button>
             </div>
         </div>
     </li>
